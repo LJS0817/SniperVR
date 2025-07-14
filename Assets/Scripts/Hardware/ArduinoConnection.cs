@@ -3,6 +3,51 @@ using System.IO.Ports;
 using System;
 using System.Collections.Generic; // Dictionary를 사용하기 위함
 
+// Key-Value 쌍을 직렬화하기 위한 Serializable 클래스
+[Serializable]
+public class MyDictionaryEntry<TKey, TValue>
+{
+    public TKey Key;
+    public TValue Value;
+
+    public MyDictionaryEntry(TKey key, TValue value)
+    {
+        Key = key;
+        Value = value;
+    }
+}
+
+// Dictionary를 Inspector에서 보이게 하기 위한 Wrapper 클래스
+[Serializable]
+public class SerializableDictionary<TKey, TValue> : Dictionary<TKey, TValue>, ISerializationCallbackReceiver
+{
+    [SerializeField]
+    private List<MyDictionaryEntry<TKey, TValue>> _entries = new List<MyDictionaryEntry<TKey, TValue>>();
+
+    // 직렬화 시 호출됨: Dictionary 내용을 List로 변환
+    public void OnBeforeSerialize()
+    {
+        _entries.Clear();
+        foreach (var pair in this)
+        {
+            _entries.Add(new MyDictionaryEntry<TKey, TValue>(pair.Key, pair.Value));
+        }
+    }
+
+    // 역직렬화 시 호출됨: List 내용을 Dictionary로 변환
+    public void OnAfterDeserialize()
+    {
+        this.Clear();
+        foreach (var entry in _entries)
+        {
+            if (entry.Key != null && !this.ContainsKey(entry.Key)) // 중복 키 방지
+            {
+                this.Add(entry.Key, entry.Value);
+            }
+        }
+    }
+}
+
 public class ArduinoConnection : MonoBehaviour
 {
     public string portName = "COM4";
@@ -10,11 +55,13 @@ public class ArduinoConnection : MonoBehaviour
     private string buffer = "";
 
     // 현재 센서 값 (UI/게임 로직에서 사용)
-    public int elevationValue;
-    public int windageValue;
-    public int parallaxValue;
-    public int zoomValue;
-    public int reloadValue;
+    //public int elevationValue;
+    //public int windageValue;
+    //public int parallaxValue;
+    //public int zoomValue;
+    //public int reloadValue;
+    public SerializableDictionary<string, int> data;
+
 
     private SerialPort serialPort;
     private bool isPortOpen = false;
@@ -22,12 +69,7 @@ public class ArduinoConnection : MonoBehaviour
     void Start()
     {
         OpenSerialPort();
-        // 초기값 설정
-        elevationValue = 0;
-        windageValue = 0;
-        parallaxValue = 0;
-        zoomValue = 0;
-        reloadValue = 0;
+        data = new SerializableDictionary<string, int>();
     }
 
     void OpenSerialPort()
@@ -74,24 +116,20 @@ public class ArduinoConnection : MonoBehaviour
         }
     }
 
-    void ParseData(string data)
+    void ParseData(string str)
     {
-        Debug.Log($"[RAW] {data}");
 
-        string[] keyValuePairs = data.Split(';');
-        Dictionary<string, int> dataMap = new Dictionary<string, int>();
+        Debug.Log($"[RAW] {str}");
+        string[] keyValuePairs = str.Split(';');
 
         foreach (string pair in keyValuePairs)
         {
             string[] parts = pair.Split(':');
             if (parts.Length == 2 && int.TryParse(parts[1], out int val))
             {
-                dataMap[parts[0]] = val;
+                data[parts[0]] = val;
             }
         }
-
-        if (dataMap.ContainsKey("Z")) zoomValue = dataMap["Z"];
-        if (dataMap.ContainsKey("R")) reloadValue = dataMap["R"];
     }
 
     void OnApplicationQuit()
