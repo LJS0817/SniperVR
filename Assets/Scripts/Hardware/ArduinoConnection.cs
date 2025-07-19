@@ -1,7 +1,15 @@
 using UnityEngine;
 using System.IO.Ports;
 using System;
-using System.Collections.Generic; // Dictionary를 사용하기 위함
+using System.Collections.Generic;
+using UnityEngine.Events; // UnityEvent 사용을 위해 추가
+
+// Dictionary<string, int>를 인자로 받는 UnityEvent 정의
+// 이렇게 사용자 정의 UnityEvent 타입을 선언해야 인스펙터에서 Dictionary<string, int>를 인자로 받는 메서드를 선택할 수 있습니다.
+[Serializable]
+public class SensorDataUpdateEvent : UnityEvent<Dictionary<string, int>> { }
+
+// MyDictionaryEntry와 SerializableDictionary 클래스는 동일하게 유지
 
 // Key-Value 쌍을 직렬화하기 위한 Serializable 클래스
 [Serializable]
@@ -48,28 +56,29 @@ public class SerializableDictionary<TKey, TValue> : Dictionary<TKey, TValue>, IS
     }
 }
 
+
 public class ArduinoConnection : MonoBehaviour
 {
+    // === UnityEvent 정의 ===
+    // 인스펙터에서 할당 가능하도록 SerializeField로 표시합니다.
+    [SerializeField]
+    private SensorDataUpdateEvent _onSensorDataUpdated = new SensorDataUpdateEvent();
+    public SensorDataUpdateEvent OnSensorDataUpdated => _onSensorDataUpdated; // 외부에서 접근용 프로퍼티
+
     public string portName = "COM4";
     public int baudRate = 9600;
     private string buffer = "";
 
-    // 현재 센서 값 (UI/게임 로직에서 사용)
-    //public int elevationValue;
-    //public int windageValue;
-    //public int parallaxValue;
-    //public int zoomValue;
-    //public int reloadValue;
+    // 기존의 SerializableDictionary<string, int> data는 그대로 유지
     public SerializableDictionary<string, int> data;
-
 
     private SerialPort serialPort;
     private bool isPortOpen = false;
 
     void Start()
     {
+        data = new SerializableDictionary<string, int>(); // Start에서 초기화
         OpenSerialPort();
-        data = new SerializableDictionary<string, int>();
     }
 
     void OpenSerialPort()
@@ -118,17 +127,27 @@ public class ArduinoConnection : MonoBehaviour
 
     void ParseData(string str)
     {
-
         Debug.Log($"[RAW] {str}");
         string[] keyValuePairs = str.Split(';');
+        bool dataChanged = false; // 데이터 변경 여부 플래그
 
         foreach (string pair in keyValuePairs)
         {
             string[] parts = pair.Split(':');
             if (parts.Length == 2 && int.TryParse(parts[1], out int val))
             {
-                data[parts[0]] = val;
+                // 데이터가 실제로 변경되었는지 확인
+                if (!data.ContainsKey(parts[0]) || data[parts[0]] != val)
+                {
+                    data[parts[0]] = val;
+                    dataChanged = true; // 변경되었으면 플래그 설정
+                }
             }
+        }
+
+        if (dataChanged)
+        {
+            _onSensorDataUpdated?.Invoke(new Dictionary<string, int>(data));
         }
     }
 
