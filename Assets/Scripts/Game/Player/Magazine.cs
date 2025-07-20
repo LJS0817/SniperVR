@@ -48,7 +48,7 @@ public class Magazine : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("탄창이 비었다");
+            Debug.Log("탄창이 비었다");
             return null; 
         }
     }

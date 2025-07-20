@@ -112,12 +112,15 @@ void loop() {
 
     // 가변저항 값 읽기 및 변경 감지 (여전히 폴링)
     int currentZoom = analogRead(zoomPotPin);
+    currentZoom = map(currentZoom, 1023, 0, 0, 100);
     bool zoomChanged = abs(currentZoom - prevZoomValue) > analogThreshold;
     if (zoomChanged) prevZoomValue = currentZoom;
-
+    
     int currentReload = analogRead(reloadSliderPin);
-    bool reloadChanged = abs(currentReload - prevReloadValue) > analogThreshold;
+    currentReload = map(currentReload, 1023, 0, 0, 100);
+    bool reloadChanged = abs(currentReload - prevReloadValue) > 3;
     if (reloadChanged) prevReloadValue = currentReload;
+    
 
     String dataToSend = "";
 

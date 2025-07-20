@@ -36,7 +36,10 @@ public class BulletPool : MonoBehaviour
     {
         if (ammoToReturn == null) return;
 
-        ammoToReturn.SetActive(false);
+        //ammoToReturn.SetActive(false);
+
+        //ammoToReturn.GetComponent<Rigidbody>().useGravity = false;
+        //ammoToReturn.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
         ammoToReturn.transform.parent = transform;
         _ammoPool.Push(ammoToReturn);
     }
