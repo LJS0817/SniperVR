@@ -5,8 +5,6 @@ public class Rifle : MonoBehaviour
 {
     Animator _ani;
 
-    public bool ShootTrigger;
-
     [SerializeField] Camera _scope;
     [SerializeField] Transform _scopeDial;
     float _targetZoom;
@@ -15,6 +13,7 @@ public class Rifle : MonoBehaviour
     [SerializeField] Transform _cylinder;
     [SerializeField] Transform _maxCylinderPosition;
     [SerializeField] Transform _frontCylinder;
+    [SerializeField] Transform _ammoInsertPoint;
     Vector3 _targetCylinder;
     Vector3 _defaultCylinderPosition;
     int _prevCylinderValue;
@@ -23,11 +22,13 @@ public class Rifle : MonoBehaviour
     [SerializeField] bool _isOpenedCylinder;
 
     [SerializeField] Transform _trigger;
+    [SerializeField] Transform _firePoint;
     [SerializeField] Magazine _magazine;
     [SerializeField] Transform _popAmmoDir;
     [SerializeField] bool _isSetStand;
 
-    GameObject _curAmmo;
+    Ammo _curAmmo;
+    Bullet _bullet;
 
     // START, RANGE
     private readonly Vector2 ZOOM_RANGE = new Vector2(60f, 35f);
@@ -38,8 +39,8 @@ public class Rifle : MonoBehaviour
         _ani = GetComponent<Animator>();
         
         _isOpenedCylinder = true;
-        _defaultCylinderPosition = _targetCylinder = _cylinder.position;
-        _targetCylinderDist = _maxCylinderPosition.position.z - _cylinder.position.z;
+        _defaultCylinderPosition = _targetCylinder = _cylinder.localPosition;
+        _targetCylinderDist = _maxCylinderPosition.localPosition.z - _cylinder.localPosition.z;
         _prevCylinderValue = 0;
 
         _isSetStand = false;
@@ -47,12 +48,34 @@ public class Rifle : MonoBehaviour
 
         _targetZoom = ZOOM_RANGE.x;
         _targetZoomDial = Quaternion.identity;
+
+        BulletPool.Instance.InitializeMagazine(_ammoInsertPoint, _popAmmoDir.right);
+        _bullet = BulletPool.Instance.CreateBullet().GetComponent<Bullet>();
+        _bullet.Init(_firePoint);
+        _magazine.SetFullMagazine();
     }
 
     private void Update()
     {
         followScopeZoom();
         followCylinderPosition();
+    }
+
+    public void SetTriggerState(float value)
+    {
+        //-90 ~ -70
+        _trigger.localRotation = Quaternion.Euler(-90f + 20 * value, _trigger.localRotation.y, _trigger.localRotation.z);
+        if(value == 1f && _curAmmo != null && _curAmmo.isAvaliable())
+        {
+            fire();
+        }
+    }
+
+    void fire()
+    {
+        _curAmmo.Fire();
+        _bullet.gameObject.SetActive(true);
+        _bullet.Fire();
     }
 
     void followScopeZoom()
@@ -66,9 +89,9 @@ public class Rifle : MonoBehaviour
 
     void followCylinderPosition()
     {
-        if(_cylinder.position.z != _targetCylinder.z)
+        if(_cylinder.localPosition.z != _targetCylinder.z)
         {
-            _cylinder.position = Vector3.Lerp(_cylinder.position, _targetCylinder, 30f * Time.deltaTime);
+            _cylinder.localPosition = Vector3.Lerp(_cylinder.localPosition, _targetCylinder, 30f * Time.deltaTime);
         }
     }
 
@@ -82,7 +105,7 @@ public class Rifle : MonoBehaviour
         }
         if (receivedValues.TryGetValue("R", out int reloadValue))
         {
-            _targetCylinder = _cylinder.position;
+            _targetCylinder = _cylinder.localPosition;
             _targetCylinder.z = _defaultCylinderPosition.z + _targetCylinderDist * reloadValue * 0.01f;
             if (reloadValue > 82)
             {
@@ -137,8 +160,7 @@ public class Rifle : MonoBehaviour
     {
         Debug.Log("POP OUT");
         if (_curAmmo == null) return;
-        _curAmmo.GetComponent<Rigidbody>().AddForce(_popAmmoDir.right * 5f, ForceMode.Impulse);
-        _curAmmo.GetComponent<Rigidbody>().useGravity = true;
+        _curAmmo.PopOut();
         BulletPool.Instance.ReturnAmmo(_curAmmo);
         _curAmmo = null;
     }
@@ -146,10 +168,8 @@ public class Rifle : MonoBehaviour
     private void PushInAmmo()
     {
         if (_curAmmo != null) return;
-        Debug.Log("TEST");
         _curAmmo = _magazine.PopAmmo();
-        _curAmmo.transform.parent = _frontCylinder;
-        _curAmmo.transform.localPosition = Vector3.zero;
+        _curAmmo.LoadAmmo(_frontCylinder);
     }
 
     //public void StartReload()

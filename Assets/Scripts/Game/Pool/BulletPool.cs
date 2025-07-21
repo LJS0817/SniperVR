@@ -5,9 +5,10 @@ public class BulletPool : MonoBehaviour
 {
     public static BulletPool Instance { get; private set; }
 
-    private Stack<GameObject> _ammoPool;
+    private Stack<Ammo> _ammoPool;
     private const int MAX_CAPACITY = 60;
     public GameObject AmmoPrefab;
+    public GameObject BulletPrefab;
 
     void Awake()
     {
@@ -18,21 +19,20 @@ public class BulletPool : MonoBehaviour
         }
         Instance = this;
 
-        _ammoPool = new Stack<GameObject>();
-        InitializeMagazine();
+        _ammoPool = new Stack<Ammo>();
     }
 
-    private void InitializeMagazine()
+    public void InitializeMagazine(Transform point, Vector3 popDir)
     {
         for (int i = 0; i < MAX_CAPACITY; i++)
         {
-            GameObject ammo = Instantiate(AmmoPrefab, transform);
-            ammo.SetActive(false);
+            Ammo ammo = Instantiate(AmmoPrefab, transform).GetComponent<Ammo>();
+            ammo.Init(point, popDir);
             _ammoPool.Push(ammo);
         }
     }
 
-    public void ReturnAmmo(GameObject ammoToReturn)
+    public void ReturnAmmo(Ammo ammoToReturn)
     {
         if (ammoToReturn == null) return;
 
@@ -44,11 +44,11 @@ public class BulletPool : MonoBehaviour
         _ammoPool.Push(ammoToReturn);
     }
 
-    public GameObject GetAmmo()
+    public Ammo GetAmmo()
     {
         if (_ammoPool.Count > 0)
         {
-            GameObject ammo = _ammoPool.Pop();
+            Ammo ammo = _ammoPool.Pop();
             return ammo;
         }
         else
@@ -56,6 +56,11 @@ public class BulletPool : MonoBehaviour
             Debug.LogWarning("BulletPool Empty");
             return null;
         }
+    }
+
+    public GameObject CreateBullet()
+    {
+        return Instantiate(BulletPrefab, transform);
     }
 
     public int GetAvailableBulletCount()

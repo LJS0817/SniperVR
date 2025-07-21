@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Magazine : MonoBehaviour
 {
-    private Stack<GameObject> _ammo;
+    private Stack<Ammo> _ammo;
 
     public Transform FirstAmmoPosition;
     public Transform MagazineBottom;
@@ -14,21 +14,9 @@ public class Magazine : MonoBehaviour
     private readonly Vector3 _leftAmmoStep = new Vector3(-0.0092f, -0.0074f, 0);
     private readonly Vector3 _bottomStep = new Vector3(0, -0.006952f, 0);
 
-    public bool Trigger = false;
-
-    void Start()
-    {
-        _ammo = new Stack<GameObject>();
-        SetFullMagazine();
-    }
-
     private void Update()
     {
-        if(Trigger)
-        {
-            PopAmmo().SetActive(false);
-            Trigger = false;
-        }
+        
     }
 
     private Vector3 GetAmmoLocalPosition(int index)
@@ -38,11 +26,11 @@ public class Magazine : MonoBehaviour
         return basePos + step + _rightAmmoStep * ((index) / 2);
     }
 
-    public GameObject PopAmmo()
+    public Ammo PopAmmo()
     {
         if (!IsMagazineEmpty())
         {
-            GameObject ammo = _ammo.Pop();
+            Ammo ammo = _ammo.Pop();
             MagazineBottom.localPosition -= _bottomStep;
             return ammo;
         }
@@ -65,12 +53,11 @@ public class Magazine : MonoBehaviour
 
     public void SetFullMagazine()
     {
-        for(int i = 0; i < MAX_CAPACITY; i++)
+        if(_ammo == null) _ammo = new Stack<Ammo>();
+        for (int i = _ammo.Count; i < MAX_CAPACITY; i++)
         {
-            GameObject obj = BulletPool.Instance.GetAmmo();
-            obj.transform.parent = MagazineBottom;
-            obj.transform.localPosition = GetAmmoLocalPosition(i);
-            obj.SetActive(true);
+            Ammo obj = BulletPool.Instance.GetAmmo();
+            obj.LoadInMagazine(MagazineBottom, GetAmmoLocalPosition(i));
             _ammo.Push(obj);
             if(i > 0) MagazineBottom.localPosition += _bottomStep;
         }
