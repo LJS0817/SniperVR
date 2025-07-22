@@ -33,6 +33,6 @@ public class Bullet : MonoBehaviour
         transform.position = _firePoint.position;
         _rig.angularVelocity = Vector3.zero;
         _rig.linearVelocity = Vector3.zero;
-        _rig.AddForce(_firePoint.forward * 10f, ForceMode.Impulse);
+        _rig.AddForce(_firePoint.forward * 8f, ForceMode.Impulse);
     }
 }

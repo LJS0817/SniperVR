@@ -1065,17 +1065,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baa79799872c35c4c80e7814008b47b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _scope: {fileID: 1751957861}
-  _scopeDial: {fileID: 5725198812444386496}
-  _cylinder: {fileID: 8147456017744481220}
-  _maxCylinderPosition: {fileID: 1761985092}
-  _frontCylinder: {fileID: 751044139482508807}
-  _ammoInsertPoint: {fileID: 832085304}
-  _isOpenedCylinder: 0
+  _scope: {fileID: 7556169106885094132}
+  _cylinder: {fileID: 8147456017744481221}
   _trigger: {fileID: 4600695673739988168}
   _firePoint: {fileID: 807172802}
   _magazine: {fileID: 627224368}
-  _popAmmoDir: {fileID: 922187203}
   _isSetStand: 0
 --- !u!95 &356182124
 Animator:
@@ -1691,7 +1685,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 100}
-  m_LocalScale: {x: 1, y: 1.2146645, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -2476,7 +2470,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.76
+  near clip plane: 0.22
   far clip plane: 1000
   field of view: 1.6
   orthographic: 0
@@ -2504,13 +2498,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1751957858}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.01, y: 0.010000002, z: 0.010000002}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Father: {fileID: 7556169106885094131}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &1761985091
 GameObject:
   m_ObjectHideFlags: 0
@@ -3278,13 +3272,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3392807746291762853}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.7071068, y: 0, z: -0, w: 0.7071067}
+  m_LocalRotation: {x: 0.30997527, y: -0.63554335, z: -0.63554335, w: 0.30997527}
   m_LocalPosition: {x: 1.4901161e-10, y: 0.000012220591, z: 0.00032742976}
   m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7556169106885094131}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -38, y: -90, z: -90}
 --- !u!1 &3523036549440065480
 GameObject:
   m_ObjectHideFlags: 0
@@ -3652,6 +3646,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7556169106885094131}
+  - component: {fileID: 7556169106885094132}
   m_Layer: 0
   m_Name: Scope
   m_TagString: Untagged
@@ -4107,13 +4102,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6699031419558713905}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 0.00030306046, y: 0.000009612739, z: -0.0000107318165}
+  m_LocalRotation: {x: -0.98901594, y: 0, z: 0, w: -0.14780933}
+  m_LocalPosition: {x: 0.00030306046, y: 0.000024700015, z: -0.000011900063}
   m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7556169106885094131}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -197, y: 0, z: 0}
 --- !u!1 &6966587221058642637
 GameObject:
   m_ObjectHideFlags: 0
@@ -4149,6 +4144,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8147456017744481220}
+  - component: {fileID: 8147456017744481221}
   m_Layer: 0
   m_Name: Reloader Pivot
   m_TagString: Untagged
@@ -4164,13 +4160,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5791578416424710500}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -0.00029703148, y: 0.000012220591, z: -0.000010732412}
+  m_LocalRotation: {x: 0.9958509, y: -0, z: -0, w: 0.09100032}
+  m_LocalPosition: {x: -0.00029703148, y: 0.0000273, z: -0.000008}
   m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7556169106885094131}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -5230.442, y: 0, z: 0}
 --- !u!1 &7367355121229200592
 GameObject:
   m_ObjectHideFlags: 0
@@ -4294,6 +4290,7 @@ Transform:
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1751957862}
   - {fileID: 3776008013104010860}
   - {fileID: 716014932}
   - {fileID: 6919780523974298085}
@@ -4303,6 +4300,24 @@ Transform:
   - {fileID: 5725198812444386496}
   m_Father: {fileID: 543450652806984554}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7556169106885094132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5309455636883046032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1db9c8edb51fe1a44896d9cf6acaa7ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _scope: {fileID: 1751957861}
+  _dials:
+  - {fileID: 5725198812444386496}
+  - {fileID: 6919780523974298085}
+  - {fileID: 3497082105471617883}
+  - {fileID: 7148203221884703510}
 --- !u!33 &7561725985291085933
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -4461,6 +4476,24 @@ Transform:
   - {fileID: 751044139482508807}
   m_Father: {fileID: 543450652806984554}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8147456017744481221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7085195008023633974}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40d3f9fe2c1838c4cb7ead3ac3eebee9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _cylinder: {fileID: 7392250791111393935}
+  _maxCylinderPosition: {fileID: 1761985092}
+  _frontCylinder: {fileID: 751044139482508807}
+  _ammoInsertPoint: {fileID: 832085304}
+  _popAmmoDir: {fileID: 922187203}
+  _isOpenedCylinder: 0
 --- !u!33 &8169674164014632242
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -4525,7 +4558,6 @@ SceneRoots:
   - {fileID: 410087041}
   - {fileID: 832575519}
   - {fileID: 798682277}
-  - {fileID: 1751957862}
   - {fileID: 763093789}
   - {fileID: 1512123769}
   - {fileID: 62512374}
