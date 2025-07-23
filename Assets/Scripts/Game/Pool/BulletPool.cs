@@ -37,7 +37,7 @@ public class BulletPool : MonoBehaviour
     public void SetHitSign(Vector3 pos)
     {
         GameObject obj = Instantiate(HitSign, pos, Quaternion.identity, transform);
-        Destroy(obj, 5f);
+        Destroy(obj, 15f);
     }
 
     public void ReturnAmmo(Ammo ammoToReturn)
