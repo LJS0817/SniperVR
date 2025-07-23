@@ -5,11 +5,6 @@ public class Bullet : MonoBehaviour
     Transform _firePoint;
     Rigidbody _rig;
 
-    private void Start()
-    {
-        
-    }
-
     public void Init(Transform point)
     {
         _firePoint = point;
@@ -26,6 +21,7 @@ public class Bullet : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         gameObject.SetActive(false);
+        BulletPool.Instance.SetHitSign(transform.position);
     }
 
     public void Fire()

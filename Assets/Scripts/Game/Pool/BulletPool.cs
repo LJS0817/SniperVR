@@ -7,6 +7,8 @@ public class BulletPool : MonoBehaviour
 
     private Stack<Ammo> _ammoPool;
     private const int MAX_CAPACITY = 60;
+
+    public GameObject HitSign;
     public GameObject AmmoPrefab;
     public GameObject BulletPrefab;
 
@@ -30,6 +32,12 @@ public class BulletPool : MonoBehaviour
             ammo.Init(point, popDir);
             _ammoPool.Push(ammo);
         }
+    }
+
+    public void SetHitSign(Vector3 pos)
+    {
+        GameObject obj = Instantiate(HitSign, pos, Quaternion.identity, transform);
+        Destroy(obj, 5f);
     }
 
     public void ReturnAmmo(Ammo ammoToReturn)

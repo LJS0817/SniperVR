@@ -1,6 +1,7 @@
 #include <PinChangeInterrupt.h>
 #include <PinChangeInterruptBoards.h> // 이 헤더도 포함하는 것이 좋습니다.
 
+
 /**************
  * (핀 정의는 이전과 동일)
  *

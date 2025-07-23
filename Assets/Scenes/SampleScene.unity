@@ -2375,6 +2375,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18c1736683a725d47afb871b670292f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  HitSign: {fileID: 2414994331355942055, guid: d0a388bcc5117e649b0aa0ce14655bc0, type: 3}
   AmmoPrefab: {fileID: 882935448311713342, guid: 503434305db471c4ea9f5d2f3dd78290, type: 3}
   BulletPrefab: {fileID: 607246687116242509, guid: c7cfa7281afd1f841bd1f7d4a3c50cda, type: 3}
 --- !u!1 &1751957858
