@@ -60,8 +60,8 @@ public class ArduinoConnection : MonoBehaviour
     public int baudRate = 9600;
     private string buffer = "";
 
-    // 기존의 SerializableDictionary<string, int> data는 그대로 유지
     public SerializableDictionary<string, int> data;
+    SerializableDictionary<string, int> _curData;
 
     private SerialPort serialPort;
     private bool isPortOpen = false;
@@ -69,6 +69,7 @@ public class ArduinoConnection : MonoBehaviour
     void Start()
     {
         data = new SerializableDictionary<string, int>();
+        _curData = new SerializableDictionary<string, int>();
         OpenSerialPort();
     }
 
@@ -122,6 +123,7 @@ public class ArduinoConnection : MonoBehaviour
         string[] keyValuePairs = str.Split(';');
         bool dataChanged = false; // 데이터 변경 여부 플래그
 
+        _curData.Clear();
         foreach (string pair in keyValuePairs)
         {
             string[] parts = pair.Split(':');
@@ -131,6 +133,7 @@ public class ArduinoConnection : MonoBehaviour
                 if (!data.ContainsKey(parts[0]) || data[parts[0]] != val)
                 {
                     data[parts[0]] = val;
+                    _curData.Add(parts[0], val);
                     dataChanged = true; // 변경되었으면 플래그 설정
                 }
             }
@@ -138,7 +141,7 @@ public class ArduinoConnection : MonoBehaviour
 
         if (dataChanged)
         {
-            _onSensorDataUpdated?.Invoke(new Dictionary<string, int>(data));
+            _onSensorDataUpdated?.Invoke(new Dictionary<string, int>(_curData));
         }
     }
 

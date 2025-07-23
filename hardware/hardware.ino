@@ -61,7 +61,7 @@ int prevParallaxValue = 0;
 int prevZoomValue = 0;
 int prevReloadValue = 0;
 
-const int analogThreshold = 5;
+const int analogThreshold = 1;
 
 unsigned long lastSendTime = 0;
 const unsigned long sendInterval = 20; // 20ms마다 유니티로 데이터 전송

@@ -57,26 +57,25 @@ public class Rifle : MonoBehaviour
     public void OnSensorDataReceived(Dictionary<string, int> receivedValues)
     {
         Debug.Log("Rifle received data:");
-
-        if (receivedValues.TryGetValue("Z", out int zoomValue))
+        if (receivedValues.ContainsKey("Z") && receivedValues.TryGetValue("Z", out int zoomValue))
         {
             _scope.Zoom(zoomValue);
         }
-        if (receivedValues.TryGetValue("R", out int reloadValue))
+        if (receivedValues.ContainsKey("R") && receivedValues.TryGetValue("R", out int reloadValue))
         {
             _cylinder.SetCylinderPosition(reloadValue);
         }
-        if (receivedValues.TryGetValue("E", out int elevationValue))
+        if (receivedValues.ContainsKey("E") && receivedValues.TryGetValue("E", out int elevationValue))
         {
             _scope.AdjustElevation(elevationValue);
         }
-        if (receivedValues.TryGetValue("W", out int windageValue))
+        if (receivedValues.ContainsKey("W") && receivedValues.TryGetValue("W", out int windageValue))
         {
             _scope.AdjustWindage(windageValue);
         }
-        if (receivedValues.TryGetValue("P", out int parallaxValue))
+        if (receivedValues.ContainsKey("P") && receivedValues.TryGetValue("P", out int parallaxValue))
         {
-            _scope.AdjustParallax(windageValue);
+            _scope.AdjustParallax(parallaxValue);
         }
     }
 }

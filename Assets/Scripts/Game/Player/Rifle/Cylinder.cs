@@ -26,11 +26,11 @@ public class Cylinder : MonoBehaviour
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake()
     {
         _isOpenedCylinder = true;
-        _defaultCylinderPosition = _targetCylinder = _cylinder.localPosition;
-        _targetCylinderDist = _maxCylinderPosition.localPosition.z - _cylinder.localPosition.z;
+        _defaultCylinderPosition = _targetCylinder = transform.localPosition;
+        _targetCylinderDist = _maxCylinderPosition.localPosition.z - transform.localPosition.z;
         _prevCylinderValue = 0;
         _curAmmo = null;
 
@@ -45,9 +45,9 @@ public class Cylinder : MonoBehaviour
 
     void followCylinderPosition()
     {
-        if (_cylinder.localPosition.z != _targetCylinder.z)
+        if (transform.localPosition.z != _targetCylinder.z)
         {
-            _cylinder.localPosition = Vector3.Lerp(_cylinder.localPosition, _targetCylinder, 30f * Time.deltaTime);
+            transform.localPosition = Vector3.Lerp(transform.localPosition, _targetCylinder, 30f * Time.deltaTime);
         }
     }
 
@@ -63,7 +63,7 @@ public class Cylinder : MonoBehaviour
 
     public void SetCylinderPosition(int reloadValue)
     {
-        _targetCylinder = _cylinder.localPosition;
+        _targetCylinder = transform.localPosition;
         _targetCylinder.z = _defaultCylinderPosition.z + _targetCylinderDist * reloadValue * 0.01f;
         if (reloadValue > 82)
         {

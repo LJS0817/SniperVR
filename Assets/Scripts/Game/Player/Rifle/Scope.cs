@@ -19,7 +19,7 @@ public class Scope : MonoBehaviour
     Quaternion _targetZoomDial;
 
     // START, RANGE
-    private readonly Vector2 ZOOM_RANGE = new Vector2(60f, 35f);
+    private readonly Vector2 ZOOM_RANGE = new Vector2(15f, 14f);
     private readonly Vector2 ZOOM_DIAL_RANGE = new Vector2(-140f, 215f);
     const float ROTATION_PER_CLICK = 0.00775f;  //0.0155f * 0.5f;
     const float DIAL_ROTATION_PER_CLICK = 3.6f;
@@ -40,14 +40,14 @@ public class Scope : MonoBehaviour
     void Update()
     {
         Debug.DrawRay(_scope.transform.position, _scope.transform.forward * 1000f, Color.blue);
-        //followScopeZoom();
-        if(Input.GetKeyDown(KeyCode.W))
+        followScopeZoom();
+        if (Input.GetKeyDown(KeyCode.W))
         {
-            AdjustWindage(_prevWindageValue + 1);
+            AdjustWindage(_prevElevationValue + 1);
         }
         if (Input.GetKeyDown(KeyCode.S))
         {
-            AdjustWindage(_prevWindageValue - 1);
+            AdjustWindage(_prevElevationValue - 1);
         }
     }
 
@@ -73,8 +73,8 @@ public class Scope : MonoBehaviour
     
     public void AdjustElevation(int eVal)
     {
-        Debug.Log($"Elevation value received: {eVal}");
-        bool dir = eVal - _prevElevationValue > 0;
+        Debug.Log($"Elevation value received: {eVal},     {_prevElevationValue}");
+        bool dir = eVal - _prevElevationValue < 0;
         _scope.transform.Rotate(dir ? ROTATION_PER_CLICK : -ROTATION_PER_CLICK, 0, 0);
         getDial(SCOPE_TYPE.E_ELEVATION).Rotate(0, dir ? DIAL_ROTATION_PER_CLICK : -DIAL_ROTATION_PER_CLICK, 0);
         _prevElevationValue = eVal;
@@ -82,9 +82,9 @@ public class Scope : MonoBehaviour
     
     public void AdjustWindage(int wVal)
     {
-        Debug.Log($"Windage value received: {wVal}");
+        Debug.Log($"Windage value received: {wVal},     {_prevWindageValue}");
         bool dir = wVal - _prevWindageValue > 0;
-        _scope.transform.Rotate(dir ? ROTATION_PER_CLICK : -ROTATION_PER_CLICK, 0, 0);
+        _scope.transform.Rotate(0, dir ? ROTATION_PER_CLICK : -ROTATION_PER_CLICK, 0);
         getDial(SCOPE_TYPE.E_WINDAGE).Rotate(dir ? DIAL_ROTATION_PER_CLICK : -DIAL_ROTATION_PER_CLICK, 0, 0);
         _prevWindageValue = wVal;
     }
