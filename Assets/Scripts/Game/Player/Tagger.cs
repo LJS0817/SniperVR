@@ -1,11 +1,14 @@
+using TMPro;
 using UnityEngine;
 
 public class Tagger : MonoBehaviour
 {
+    [SerializeField] TextMeshProUGUI text;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -17,7 +20,8 @@ public class Tagger : MonoBehaviour
         {
             if(hit.collider)
             {
-                Debug.Log(hit.transform.name + " Distance  : " + Mathf.Round((hit.transform.position - transform.position).magnitude) + " m");
+                text.text = Mathf.Round((hit.transform.position - transform.position).magnitude) + " m";
+                //Debug.Log(hit.transform.name + " Distance  : " + text.text);
             }
         }
     }

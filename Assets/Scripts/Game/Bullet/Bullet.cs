@@ -18,6 +18,15 @@ public class Bullet : MonoBehaviour
         
     }
 
+    void FixedUpdate()
+    {
+        if (WindController.Instance != null)
+        {
+            Vector3 windForce = WindController.Instance.GetWindForceAtPosition(transform.position);
+            _rig.AddForce(windForce, ForceMode.Force);
+        }
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         gameObject.SetActive(false);
