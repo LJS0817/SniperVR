@@ -26,6 +26,7 @@ public class SpotChanger : MonoBehaviour
         {
             _curIndex = 0;
         }
+        transform.position = listPos[_curIndex].position;
     }
 
     // Update is called once per frame
