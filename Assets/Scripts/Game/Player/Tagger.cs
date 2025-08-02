@@ -22,6 +22,7 @@ public class Tagger : MonoBehaviour
             {
                 text.text = Mathf.Round((hit.transform.position - transform.position).magnitude) + " m";
                 //Debug.Log(hit.transform.name + " Distance  : " + text.text);
+
             }
         }
     }
