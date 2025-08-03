@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Rifle : MonoBehaviour
@@ -13,7 +14,12 @@ public class Rifle : MonoBehaviour
     [SerializeField] Magazine _magazine;
     [SerializeField] bool _isSetStand;
 
+    [SerializeField] TextMeshProUGUI _ammoText;
+
     Bullet _bullet;
+
+    int _bulletCount;
+    const int _MAX_BULLET_COUNT = 35;
 
     void Start()
     {
@@ -21,11 +27,14 @@ public class Rifle : MonoBehaviour
         
         _isSetStand = false;
 
+        _bulletCount = _MAX_BULLET_COUNT;
+
         _bullet = BulletPool.Instance.CreateBullet().GetComponent<Bullet>();
         _bullet.Init(_firePoint);
         _magazine.SetFullMagazine();
 
         _cylinder.SetAmmoEvent(_magazine.PopAmmo);
+        _ammoText.text = _magazine.GetCurrentAmmoCount() + " / " + _bulletCount;
     }
 
     private void Update()
@@ -50,8 +59,16 @@ public class Rifle : MonoBehaviour
     void fire()
     {
         _cylinder.Fire();
+        _bulletCount--;
         _bullet.gameObject.SetActive(true);
         _bullet.Fire();
+        _ammoText.text = _magazine.GetCurrentAmmoCount() + " / " + _bulletCount;
+    }
+
+    public void Reload()
+    {
+        if (_magazine == null) return;
+        _magazine.SetFullMagazine();
     }
 
     public void OnSensorDataReceived(Dictionary<string, int> receivedValues)

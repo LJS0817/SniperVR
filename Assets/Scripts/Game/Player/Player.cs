@@ -1,14 +1,12 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static UnityEngine.GraphicsBuffer;
 
 public class Player : MonoBehaviour
 {
     public Rifle Gun;
 
     public InputActionReference Trigger;
-
-    //ArduinoConnection _arduino;
+    public InputActionReference Reload;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -16,7 +14,8 @@ public class Player : MonoBehaviour
         Trigger.action.started += triggerAction;
         Trigger.action.performed += triggerAction;
         Trigger.action.canceled += triggerAction;
-        //_arduino = GetComponent<ArduinoConnection>();
+
+        Reload.action.started += reloadAction;
     }
 
     private void OnDestroy()
@@ -24,6 +23,8 @@ public class Player : MonoBehaviour
         Trigger.action.started -= triggerAction;
         Trigger.action.performed -= triggerAction;  
         Trigger.action.canceled -= triggerAction;
+
+        Reload.action.started -= reloadAction;
     }
 
     // Update is called once per frame
@@ -37,5 +38,11 @@ public class Player : MonoBehaviour
         float triggerValue = Trigger.action.ReadValue<float>();
         Debug.Log("Trigger Value: " + triggerValue);
         Gun.SetTriggerState(triggerValue);
+    }
+
+    void reloadAction(InputAction.CallbackContext cxt)
+    {
+        Debug.Log("Reload");
+        Gun.Reload();
     }
 }
