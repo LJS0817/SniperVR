@@ -72,6 +72,7 @@ public class Ammo : MonoBehaviour
     {
         transform.parent = parent;
         transform.localPosition = pos;
+        transform.localRotation = Quaternion.Euler(-90, 0, 0);
         _loaded = false;
         gameObject.SetActive(true);
     }

@@ -40,6 +40,7 @@ public class Scope : MonoBehaviour
     void Update()
     {
         Debug.DrawRay(_scope.transform.position, _scope.transform.forward * 1000f, Color.blue);
+        
         followScopeZoom();
         if (Input.GetKeyDown(KeyCode.W))
         {
