@@ -33,6 +33,7 @@ public class Player : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.W))
         {
             Gun.transform.localPosition = Vector3.zero;
+            Gun.transform.localRotation = Quaternion.identity;
         }
     }
 

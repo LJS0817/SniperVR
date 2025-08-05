@@ -30,7 +30,7 @@ public class Bullet : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         gameObject.SetActive(false);
-        BulletPool.Instance.SetHitSign(transform.position);
+        BulletPool.Instance.SetHitSign(collision.contacts[0].point);
     }
 
     public void Fire()

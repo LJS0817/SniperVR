@@ -10,13 +10,11 @@ public class TaggableObject : MonoBehaviour
 
     int _distance;
 
-    [SerializeField] float s = 1f;
     //const float MAX_SCALE = 1f;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         _tag = null;
-        s = 1f;
         _distance = 0;
     }
 
@@ -26,7 +24,7 @@ public class TaggableObject : MonoBehaviour
         if(_tag == null) return;
         _tag.LookAt(_player);
 
-        float scale = _distance / s;
+        float scale = _distance / (6f * (Scope.ZOOM * 6f));
         //if(scale < MAX_SCALE) scale = MIN_SCALE;
         _tag.localScale = new Vector3(scale, scale, 1f);
     }

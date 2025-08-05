@@ -12,6 +12,7 @@ public class Scope : MonoBehaviour
     }
 
     [SerializeField] Camera _scope;
+    [SerializeField] Camera _tagScope;
 
     [SerializeField] List<Transform> _dials;
 
@@ -33,6 +34,7 @@ public class Scope : MonoBehaviour
     //0.0155f
     void Start()
     {
+        _tagScope = _scope.transform.GetChild(0).GetComponent<Camera>();
         _prevWindageValue = _prevElevationValue = 0;
         _targetZoom = ZOOM_RANGE.x;
         _targetZoomDial = Quaternion.identity;
@@ -42,8 +44,6 @@ public class Scope : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.DrawRay(_scope.transform.position, _scope.transform.forward * 1000f, Color.blue);
-        
         followScopeZoom();
         if (Input.GetKeyDown(KeyCode.W))
         {
@@ -60,6 +60,7 @@ public class Scope : MonoBehaviour
         if (_scope.fieldOfView != _targetZoom)
         {
             _scope.fieldOfView = Mathf.Lerp(_scope.fieldOfView, _targetZoom, 30f * Time.deltaTime);
+            _tagScope.fieldOfView = _scope.fieldOfView;
             getDial(SCOPE_TYPE.E_ZOOM).localRotation = Quaternion.Lerp(getDial(SCOPE_TYPE.E_ZOOM).localRotation, _targetZoomDial, 50f * Time.deltaTime);
         }
     }

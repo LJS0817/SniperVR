@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5420734104122520862}
   - component: {fileID: 2566571218596199548}
   - component: {fileID: 4203664549037796613}
-  - component: {fileID: 5353383269628211287}
+  - component: {fileID: 1092936627979327019}
   m_Layer: 0
   m_Name: Bullet
   m_TagString: Untagged
@@ -48,12 +48,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc1df755bde8e0d4c8ad0fd4d106a72f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _trajectoryMaterial: {fileID: 0}
-  _trajectoryStartWidth: 0.05
-  _trajectoryEndWidth: 0.01
-  _minDistanceForNewPoint: 0.1
-  _trajectoryFadeOutTime: 1
-  _maxTrajectoryPoints: 4
 --- !u!33 &5420734104122520862
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -134,8 +128,8 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 2
---- !u!65 &5353383269628211287
-BoxCollider:
+--- !u!136 &1092936627979327019
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -152,6 +146,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.0062322854, y: 0.0062081013, z: 0.018999979}
-  m_Center: {x: 0, y: 0.00025302288, z: 0.0016918455}
+  serializedVersion: 2
+  m_Radius: 0.0033949572
+  m_Height: 0.018999979
+  m_Direction: 2
+  m_Center: {x: 0, y: 0.0002530232, z: 0.0016918451}
