@@ -3773,8 +3773,8 @@ Transform:
   m_GameObject: {fileID: 1428615511}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.11209, y: -0.64901, z: 1.29738}
-  m_LocalScale: {x: 0.16031, y: 0.16031, z: 0.16031}
+  m_LocalPosition: {x: 1.11209, y: -0.445, z: 1.29738}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -7637,6 +7637,7 @@ MonoBehaviour:
   - {fileID: 6919780523974298085}
   - {fileID: 3497082105471617883}
   - {fileID: 7148203221884703510}
+  HitImage: {fileID: 1428615513}
 --- !u!114 &7556169106885094133
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7653,7 +7654,7 @@ MonoBehaviour:
   HitImage: {fileID: 1428615513}
   _firePoint: {fileID: 807172802}
   _rayForward: {fileID: 1751957862}
-  f: 750
+  f: 780
 --- !u!33 &7561725985291085933
 MeshFilter:
   m_ObjectHideFlags: 0

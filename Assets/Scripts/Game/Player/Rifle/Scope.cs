@@ -15,6 +15,7 @@ public class Scope : MonoBehaviour
     [SerializeField] Camera _tagScope;
 
     [SerializeField] List<Transform> _dials;
+    [SerializeField] Transform HitImage;
 
     float _targetZoom;
     Quaternion _targetZoomDial;
@@ -73,6 +74,8 @@ public class Scope : MonoBehaviour
             _targetZoom = ZOOM_RANGE.x - ZOOM_RANGE.y * zoomRatio;
             _targetZoomDial = Quaternion.Euler(0f, ZOOM_DIAL_RANGE.x + ZOOM_DIAL_RANGE.y * zoomRatio, 0f);
             ZOOM = ZOOM_RANGE.x / _targetZoom;
+            float s = Mathf.Lerp(0.7f, 0.04f, zoomRatio);
+            HitImage.localScale = new Vector3(s, s, 0.1f);
             Debug.Log($"Zoom value: {zoomValue}, FOV: x{ZOOM.ToString("F1")}");
         }
     }

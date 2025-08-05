@@ -32,6 +32,14 @@ public class SpotChanger : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(Input.GetKeyDown(KeyCode.Q))
+        {
+            _curIndex++;
+            if (_curIndex >= listPos.Count)
+            {
+                _curIndex = 0;
+            }
+            transform.position = listPos[_curIndex].position;
+        }
     }
 }
