@@ -48,8 +48,8 @@ typedef struct sDial {
 } Dial;
 
 // 모든 다이얼 인스턴스 전역 선언 (ISR에서 접근 위함)
-Dial elevationDial(2, 3); // D2, D3
-Dial windageDial(4, 5);   // D4, D5
+Dial elevationDial(4, 5); // D2, D3
+Dial windageDial(2, 3);   // D4, D5
 Dial parallaxDial(6, 7);  // D6, D7
 
 const int zoomPotPin = A1;
@@ -113,7 +113,7 @@ void loop() {
 
     // 가변저항 값 읽기 및 변경 감지 (여전히 폴링)
     int currentZoom = analogRead(zoomPotPin);
-    currentZoom = map(currentZoom, 0, 1023, 0, 100);
+    currentZoom = map(currentZoom, 0, 1023, 100, 0);
     bool zoomChanged = abs(currentZoom - prevZoomValue) > analogThreshold;
     if (zoomChanged) prevZoomValue = currentZoom;
     

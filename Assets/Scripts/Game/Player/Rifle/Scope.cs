@@ -18,6 +18,8 @@ public class Scope : MonoBehaviour
     float _targetZoom;
     Quaternion _targetZoomDial;
 
+    public static float ZOOM { get; private set; }
+
     // START, RANGE
     private readonly Vector2 ZOOM_RANGE = new Vector2(12.8f, 12.4f);
     private readonly Vector2 ZOOM_DIAL_RANGE = new Vector2(-140f, 215f);
@@ -34,6 +36,7 @@ public class Scope : MonoBehaviour
         _prevWindageValue = _prevElevationValue = 0;
         _targetZoom = ZOOM_RANGE.x;
         _targetZoomDial = Quaternion.identity;
+        ZOOM = ZOOM_RANGE.x / _targetZoom;
     } 
 
     // Update is called once per frame
@@ -68,7 +71,8 @@ public class Scope : MonoBehaviour
             float zoomRatio = zoomValue * 0.01f;
             _targetZoom = ZOOM_RANGE.x - ZOOM_RANGE.y * zoomRatio;
             _targetZoomDial = Quaternion.Euler(0f, ZOOM_DIAL_RANGE.x + ZOOM_DIAL_RANGE.y * zoomRatio, 0f);
-            Debug.Log($"Zoom value: {zoomValue}, FOV: x{(ZOOM_RANGE.x / _targetZoom).ToString("F1")}");
+            ZOOM = ZOOM_RANGE.x / _targetZoom;
+            Debug.Log($"Zoom value: {zoomValue}, FOV: x{ZOOM.ToString("F1")}");
         }
     }
     
