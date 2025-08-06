@@ -35,15 +35,14 @@ public class Tagger : MonoBehaviour
                 Vector3 windDeflection = Vector3.zero;
                 if (WindController.Instance != null)
                 {
-                    Vector3 windForce = WindController.Instance.GetWindForceAtPosition(hitPoint);
-                    Vector3 windAcceleration = windForce;
-                    windDeflection = 0.5f * windAcceleration * timeToTarget * timeToTarget;
+                    Vector3 windForce = WindController.Instance.GetWindForceAtPosition();
+                    windDeflection = 0.5f * windForce * timeToTarget * timeToTarget;
                 }
 
                 //_predictedFinalPosition = hitPoint + windDeflection;
 
                 //HitImage.position = hitPoint;
-                HitImage.position = _firePoint.position + _firePoint.forward * dist + gravity;
+                HitImage.position = _firePoint.position + _firePoint.forward * dist + gravity + windDeflection;
 
                 /////////////////////////////////////////////////////////////////////////////
                 if (hit.transform.tag == "Taggable")

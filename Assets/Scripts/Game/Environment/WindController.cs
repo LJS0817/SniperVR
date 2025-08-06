@@ -19,7 +19,7 @@ public class WindController : MonoBehaviour
         }
     }
 
-    public Vector3 GetWindForceAtPosition(Vector3 position)
+    public Vector3 GetWindForceAtPosition()
     {
         return _windDirection.normalized * _windStrength;
     }
