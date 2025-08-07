@@ -26,7 +26,10 @@ public class Tagger : MonoBehaviour
                 float dist = Vector3.Distance(hit.transform.position, _firePoint.position);
                 text.text = Mathf.Round(dist) + " m";
 
+
                 /////////////////////////////////////////////////////////////////////////////
+                if (!HitImage.gameObject.activeInHierarchy) HitImage.gameObject.SetActive(true);
+
                 Vector3 hitPoint = hit.point;
                 float timeToTarget = dist / f;
                 
@@ -39,9 +42,6 @@ public class Tagger : MonoBehaviour
                     windDeflection = 0.5f * windForce * timeToTarget * timeToTarget;
                 }
 
-                //_predictedFinalPosition = hitPoint + windDeflection;
-
-                //HitImage.position = hitPoint;
                 HitImage.position = _firePoint.position + _firePoint.forward * dist + gravity + windDeflection;
 
                 /////////////////////////////////////////////////////////////////////////////
@@ -51,6 +51,9 @@ public class Tagger : MonoBehaviour
                     if (!t.HasTag()) t.SetTag(TagPool.Instance.GetTag(), transform);
                     t.SetDistance((int)dist);
                 }
+            } else if(HitImage.gameObject.activeInHierarchy)
+            {
+                HitImage.gameObject.SetActive(false);
             }
         }
     }

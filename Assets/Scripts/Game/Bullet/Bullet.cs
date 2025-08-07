@@ -32,6 +32,10 @@ public class Bullet : MonoBehaviour
         Debug.Log(collision.transform.name);
         gameObject.SetActive(false);
         BulletPool.Instance.SetHitSign(collision.contacts[0].point);
+        if(collision.transform.CompareTag("Taggable"))
+        {
+            Destroy(collision.gameObject, 3f);
+        }
     }
 
     public void Fire()
