@@ -65,7 +65,7 @@ public class Cylinder : MonoBehaviour
     {
         _targetCylinder = transform.localPosition;
         _targetCylinder.z = _defaultCylinderPosition.z + _targetCylinderDist * reloadValue * 0.01f;
-        if (reloadValue > 82)
+        if (reloadValue > 80)
         {
             _isOpenedCylinder = (reloadValue - _prevCylinderValue) > 0;
             if (_isOpenedCylinder) popOutAmmo();

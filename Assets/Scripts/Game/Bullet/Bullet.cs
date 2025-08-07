@@ -32,9 +32,9 @@ public class Bullet : MonoBehaviour
         Debug.Log(collision.transform.name);
         gameObject.SetActive(false);
         BulletPool.Instance.SetHitSign(collision.contacts[0].point);
-        if(collision.transform.CompareTag("Taggable"))
+        if(collision.transform.parent.CompareTag("Enemy"))
         {
-            Destroy(collision.gameObject, 3f);
+            collision.transform.GetComponent<MeshRenderer>().material.color = Color.red;
         }
     }
 

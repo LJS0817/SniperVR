@@ -44,10 +44,10 @@ public class BulletPool : MonoBehaviour
     {
         if (ammoToReturn == null) return;
 
-        //ammoToReturn.SetActive(false);
+        ammoToReturn.gameObject.SetActive(false);
 
-        //ammoToReturn.GetComponent<Rigidbody>().useGravity = false;
-        //ammoToReturn.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
+        ammoToReturn.gameObject.GetComponent<Rigidbody>().useGravity = false;
+        ammoToReturn.gameObject.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
         ammoToReturn.transform.parent = transform;
         _ammoPool.Push(ammoToReturn);
     }
@@ -62,6 +62,7 @@ public class BulletPool : MonoBehaviour
         else
         {
             Debug.LogWarning("BulletPool Empty");
+
             return null;
         }
     }

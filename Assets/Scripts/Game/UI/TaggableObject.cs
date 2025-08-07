@@ -16,6 +16,7 @@ public class TaggableObject : MonoBehaviour
     {
         _tag = null;
         _distance = 0;
+        if (_tagPos == null) _tagPos = transform.parent.GetChild(0);
     }
 
     // Update is called once per frame
@@ -31,7 +32,7 @@ public class TaggableObject : MonoBehaviour
 
     public bool HasTag()
     {
-        return _tag != null;
+        return _tagPos.childCount > 0;
     }
 
     public void SetTag(Transform t, Transform p)

@@ -28,7 +28,6 @@ public class Ammo : MonoBehaviour
             Vector3 dir = _insertPoint.position - transform.position;
             float dist = dir.magnitude;
             _moveSpeed = 5f * Mathf.Clamp01(dist / 0.1f) + 0.1f;
-            Debug.Log(dist);
             if (dist < 0.01f)
             {
                 transform.localPosition = Vector3.zero;
@@ -74,6 +73,8 @@ public class Ammo : MonoBehaviour
         transform.localPosition = pos;
         transform.localRotation = Quaternion.Euler(-90, 0, 0);
         _loaded = false;
+        _used = false;
+        transform.GetChild(0).gameObject.SetActive(true);
         gameObject.SetActive(true);
     }
 

@@ -33,7 +33,7 @@ public class Rifle : MonoBehaviour
         _bullet.Init(_firePoint);
         _magazine.SetFullMagazine();
 
-        _cylinder.SetAmmoEvent(_magazine.PopAmmo);
+        _cylinder.SetAmmoEvent(PopAmmo);
         _ammoText.text = _magazine.GetCurrentAmmoCount() + " / " + _bulletCount;
     }
 
@@ -45,6 +45,13 @@ public class Rifle : MonoBehaviour
             fire();
         }
     }
+
+    public Ammo PopAmmo()
+    {
+        Ammo am = _magazine.PopAmmo();
+        if(am != null) _bulletCount--;
+        return am;
+    } 
 
     public void SetTriggerState(float value)
     {
