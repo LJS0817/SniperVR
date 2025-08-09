@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5179181991331727908}
   - component: {fileID: 2189829651394257795}
   - component: {fileID: 9217380446732435421}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Body
   m_TagString: Taggable
   m_Icon: {fileID: 0}
@@ -136,7 +136,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4134065316081614193}
   - component: {fileID: 1456847743088915217}
-  m_Layer: 0
+  - component: {fileID: 3963736240597662101}
+  - component: {fileID: 7379894588858926091}
+  - component: {fileID: 772045965236391936}
+  m_Layer: 8
   m_Name: Enemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -174,6 +177,70 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _type: 2
+--- !u!195 &3963736240597662101
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6060368977484341523}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!114 &7379894588858926091
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6060368977484341523}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a43c50f9e5ab75743a949bcd1d9809d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerTransform: {fileID: 0}
+  coverSearchRadius: 20
+  coverLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 4096
+  currentState: 0
+--- !u!114 &772045965236391936
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6060368977484341523}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df14971c386dc7c43b9d543c311c09f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 50
+  angle: 120
+  _targetMask:
+    serializedVersion: 2
+    m_Bits: 411
+  _obstructionMask:
+    serializedVersion: 2
+    m_Bits: 0
+  Targets: []
 --- !u!1 &7370760464286850731
 GameObject:
   m_ObjectHideFlags: 0
@@ -187,7 +254,7 @@ GameObject:
   - component: {fileID: 9120918949580182357}
   - component: {fileID: 4874218351652662784}
   - component: {fileID: 4693675639092591594}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Head
   m_TagString: Taggable
   m_Icon: {fileID: 0}
@@ -307,7 +374,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8967738353563746638}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Tag
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class NPCManager : MonoBehaviour
@@ -21,10 +22,19 @@ public class NPCManager : MonoBehaviour
         }
     }
 
+    [SerializeField] Transform _player;
+    [SerializeField] List<Transform> NPCList;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        for (int i = 0; i < NPCList.Count; i++)
+        {
+            for(int j = 0; j <  NPCList[i].childCount; j++)
+            {
+                NPCList[i].GetChild(j).GetComponent<CoverController>().playerTransform = _player;
+            }
+        }
     }
 
     // Update is called once per frame
