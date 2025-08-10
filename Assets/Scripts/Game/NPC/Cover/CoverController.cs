@@ -15,6 +15,8 @@ public class CoverController : MonoBehaviour
     public enum AIState { E_SEARCH, E_CHASE, E_COVER, E_PEEK, E_ATTACK, E_DEAD }
     public AIState currentState;
 
+    [SerializeField] float hideSensitivity;
+
     FieldOfView _fov;
 
     void Start()
@@ -55,10 +57,10 @@ public class CoverController : MonoBehaviour
         Vector3 playerPos = playerTransform.position;
         Vector3 agentPos = transform.position;
 
-        foreach (CoverPoint cover in covers)
+        for(int i = 0; i < covers.Count; i++)
         {
             // 플레이어 시야 체크
-            Vector3 coverPos = cover.transform.position;
+            Vector3 coverPos = covers[i].transform.position;
             Vector3 dirToPlayer = (playerPos - coverPos).normalized;
             if (!Physics.Raycast(coverPos, dirToPlayer, 100f, playerLayer))
             {
@@ -68,11 +70,32 @@ public class CoverController : MonoBehaviour
                 if (sqrDistance < minSqrDistance)
                 {
                     minSqrDistance = sqrDistance;
-                    bestPoint = cover.transform;
+                    bestPoint = covers[i].transform;
                 }
             }
         }
+
+        Vector3 rst = playerPos - agentPos;
+        rst.Normalize();
+        rst *= -1;
+        rst.x *= bestPoint.lossyScale.x * 0.5f;
+        rst.z *= bestPoint.lossyScale.z * 0.5f;
+        rst.y = agentPos.y;
+        rst = bestPoint.position + rst;
+        
         return bestPoint;
+    }
+
+    Vector3 getCoverPosition(Transform bestPoint)
+    {
+        Vector3 rst = playerTransform.position - transform.position;
+        rst.Normalize();
+        rst *= -1;
+        rst.x *= bestPoint.lossyScale.x * 0.5f;
+        rst.z *= bestPoint.lossyScale.z * 0.5f;
+        rst.y = transform.position.y;
+        rst = bestPoint.position + rst;
+        return rst;
     }
 
     // 이 함수를 AI의 상태 머신에서 호출하여 엄폐를 시작
@@ -92,7 +115,7 @@ public class CoverController : MonoBehaviour
         if (bestCover != null)
         {
             CoverManager.Instance.OccupyCover(bestCover.GetComponent<CoverPoint>(), gameObject);
-            navAgent.SetDestination(bestCover.position);
+            navAgent.SetDestination(getCoverPosition(bestCover));
         }
     }
 }
