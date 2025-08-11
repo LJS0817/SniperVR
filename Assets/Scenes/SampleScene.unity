@@ -654,6 +654,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
+  _blockedDir: 0
 --- !u!1 &110154585
 GameObject:
   m_ObjectHideFlags: 0
@@ -878,6 +879,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
+  _blockedDir: 0
 --- !u!65 &148580258
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1624,6 +1626,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
+  _blockedDir: 0
 --- !u!1 &310093433
 GameObject:
   m_ObjectHideFlags: 0
@@ -2150,6 +2153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
+  _blockedDir: 0
 --- !u!65 &381171702
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2654,6 +2658,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
+  _blockedDir: 0
 --- !u!1001 &530933754
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2766,19 +2771,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4134065316081614193, guid: a1b4cfa1d3088d94cb1387f1ecae45f9, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0
+      value: 0.9595355
       objectReference: {fileID: 0}
     - target: {fileID: 4134065316081614193, guid: a1b4cfa1d3088d94cb1387f1ecae45f9, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4134065316081614193, guid: a1b4cfa1d3088d94cb1387f1ecae45f9, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 1
+      value: 0.28158793
       objectReference: {fileID: 0}
     - target: {fileID: 4134065316081614193, guid: a1b4cfa1d3088d94cb1387f1ecae45f9, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4134065316081614193, guid: a1b4cfa1d3088d94cb1387f1ecae45f9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2786,7 +2791,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4134065316081614193, guid: a1b4cfa1d3088d94cb1387f1ecae45f9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 32.71
       objectReference: {fileID: 0}
     - target: {fileID: 4134065316081614193, guid: a1b4cfa1d3088d94cb1387f1ecae45f9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -2989,6 +2994,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
+  _blockedDir: 3
 --- !u!1 &622510292
 GameObject:
   m_ObjectHideFlags: 0
@@ -4557,6 +4563,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
+  _blockedDir: 0
 --- !u!65 &1082943623
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4836,6 +4843,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
+  _blockedDir: 3
 --- !u!1001 &1168772860
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5115,6 +5123,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
+  _blockedDir: 0
 --- !u!1001 &1311555791
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5319,6 +5328,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
+  _blockedDir: 0
 --- !u!1 &1406072917
 GameObject:
   m_ObjectHideFlags: 0
@@ -5823,6 +5833,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
+  _blockedDir: 0
 --- !u!1 &1447602799
 GameObject:
   m_ObjectHideFlags: 0
@@ -7019,6 +7030,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
+  _blockedDir: 3
 --- !u!1001 &1692425239
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7219,6 +7231,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
+  _blockedDir: 1
 --- !u!1 &1704123186
 GameObject:
   m_ObjectHideFlags: 0
@@ -7450,6 +7463,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
+  _blockedDir: 0
 --- !u!1 &1733127101
 GameObject:
   m_ObjectHideFlags: 0
@@ -7937,6 +7951,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
+  _blockedDir: 0
 --- !u!1 &2001003844
 GameObject:
   m_ObjectHideFlags: 0
@@ -8127,6 +8142,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
+  _blockedDir: 0
 --- !u!1 &2019251343
 GameObject:
   m_ObjectHideFlags: 0
@@ -8249,6 +8265,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
+  _blockedDir: 1
 --- !u!1 &2024134035
 GameObject:
   m_ObjectHideFlags: 0
@@ -8479,6 +8496,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
+  _blockedDir: 1
 --- !u!1001 &2030764748
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8755,6 +8773,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
+  _blockedDir: 0
 --- !u!1 &2101112568
 GameObject:
   m_ObjectHideFlags: 0

@@ -35,6 +35,7 @@ public class Bullet : MonoBehaviour
         if(collision.transform.parent.CompareTag("Enemy"))
         {
             collision.transform.GetComponent<MeshRenderer>().material.color = Color.red;
+            collision.transform.parent.GetComponent<NPC>().Attacked(100);
         }
     }
 

@@ -138,7 +138,6 @@ GameObject:
   - component: {fileID: 1456847743088915217}
   - component: {fileID: 3963736240597662101}
   - component: {fileID: 7379894588858926091}
-  - component: {fileID: 772045965236391936}
   m_Layer: 8
   m_Name: Enemy
   m_TagString: Enemy
@@ -212,7 +211,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerTransform: {fileID: 0}
-  coverSearchRadius: 20
   coverLayer:
     serializedVersion: 2
     m_Bits: 128
@@ -220,27 +218,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4096
   currentState: 0
---- !u!114 &772045965236391936
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6060368977484341523}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df14971c386dc7c43b9d543c311c09f2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  radius: 50
-  angle: 120
-  _targetMask:
-    serializedVersion: 2
-    m_Bits: 411
-  _obstructionMask:
-    serializedVersion: 2
-    m_Bits: 0
-  Targets: []
+  hideSensitivity: 0
 --- !u!1 &7370760464286850731
 GameObject:
   m_ObjectHideFlags: 0
@@ -254,6 +232,7 @@ GameObject:
   - component: {fileID: 9120918949580182357}
   - component: {fileID: 4874218351652662784}
   - component: {fileID: 4693675639092591594}
+  - component: {fileID: 6363055246419191390}
   m_Layer: 8
   m_Name: Head
   m_TagString: Taggable
@@ -365,6 +344,27 @@ MonoBehaviour:
   _tag: {fileID: 0}
   _tagPos: {fileID: 0}
   _player: {fileID: 0}
+--- !u!114 &6363055246419191390
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7370760464286850731}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df14971c386dc7c43b9d543c311c09f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 50
+  angle: 120
+  _targetMask:
+    serializedVersion: 2
+    m_Bits: 411
+  _obstructionMask:
+    serializedVersion: 2
+    m_Bits: 0
+  Targets: []
 --- !u!1 &8204902560324682937
 GameObject:
   m_ObjectHideFlags: 0

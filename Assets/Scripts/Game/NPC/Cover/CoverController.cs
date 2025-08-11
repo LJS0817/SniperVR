@@ -1,7 +1,7 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using System.Collections.Generic;
-using System.Linq;
+using static NPC;
 
 public class CoverController : MonoBehaviour
 {
@@ -9,11 +9,19 @@ public class CoverController : MonoBehaviour
     //public float coverSearchRadius = 20f;
     public LayerMask coverLayer; // 엄폐물 레이어 (벽 등)
     public LayerMask playerLayer; // 플레이어 레이어
+    Vector3 _startPos;
+    float _coverTime;
+    const float MAX_PEEKING_VALUE = 25f;
+
+    float _peekValue;
+    float _peekTime;
+    int _peekTargetTimeValue;
+
+    CoverPoint.BLOCKED_COVER_DIRECTION _coverDir;
 
     private NavMeshAgent navAgent;
 
-    public enum AIState { E_SEARCH, E_CHASE, E_COVER, E_PEEK, E_ATTACK, E_DEAD }
-    public AIState currentState;
+    NPC _npcState;
 
     [SerializeField] float hideSensitivity;
 
@@ -21,29 +29,83 @@ public class CoverController : MonoBehaviour
 
     void Start()
     {
-        _fov = GetComponent<FieldOfView>();
+        _npcState = GetComponent<NPC>();
+        _coverTime = 0f;
+        _peekTime = 0f;
+        _peekTargetTimeValue = 1;
+        _startPos = transform.position;
+        _fov = transform.GetChild(1).GetComponent<FieldOfView>();
         navAgent = GetComponent<NavMeshAgent>();
     }
 
     private void Update()
     {
-        switch (currentState)
+        switch (_npcState.GetState())
         {
-            case AIState.E_SEARCH:
+            case NPC_STATE.E_SEARCH:
                 // 순찰 로직
                 break;
-            case AIState.E_CHASE:
+            case NPC_STATE.E_CHASE:
                 SeekCover();
-                currentState = AIState.E_COVER;
+                _npcState.SetState(NPC_STATE.E_COVER);
                 break;
-            case AIState.E_COVER:
+            case NPC_STATE.E_COVER:
+                reachDestnation();
                 break;
-            case AIState.E_PEEK:
+            case NPC_STATE.E_PEEK:
+                peeking();
+                resetPosition();
                 break;
-            case AIState.E_ATTACK:
+            case NPC_STATE.E_ATTACK:
                 break;
-            case AIState.E_DEAD:
+            case NPC_STATE.E_DEAD:
                 break;
+        }
+    }
+
+    void resetPosition()
+    {
+        _coverTime += Time.deltaTime;
+        if(_coverTime > 25f)
+        {
+            navAgent.SetDestination(_startPos);
+            transform.localRotation = Quaternion.Euler(transform.localRotation.x, transform.localRotation.y, 0f);
+            _coverTime = 0f;
+            _npcState.SetState(NPC_STATE.E_SEARCH);
+        }
+    }
+
+    void reachDestnation()
+    {
+        if (!navAgent.pathPending)
+        {
+            if (navAgent.remainingDistance <= navAgent.stoppingDistance)
+            {
+                if (!navAgent.hasPath || navAgent.velocity.sqrMagnitude == 0f)
+                {
+                    transform.localRotation = Quaternion.Euler(transform.localRotation.x, getYRotationValue(), 0f);
+                    _npcState.SetState(NPC_STATE.E_PEEK);
+                }
+            }
+        }
+    }
+
+    float getYRotationValue()
+    {
+        if (_coverDir == CoverPoint.BLOCKED_COVER_DIRECTION.E_LEFT) return 90f;
+        else if (_coverDir == CoverPoint.BLOCKED_COVER_DIRECTION.E_BOTTOM) return 0f;
+        else if (_coverDir == CoverPoint.BLOCKED_COVER_DIRECTION.E_RIGHT) return 270f;
+        else return 180f;
+    }
+
+    void peeking()
+    {
+        _peekTime += Time.deltaTime * _peekTargetTimeValue;
+        transform.localRotation = Quaternion.Euler(transform.localRotation.x, transform.localRotation.y, (Mathf.Lerp(transform.localRotation.z, _peekValue, _peekTime)));
+
+        if ((_peekTime >= 2f && _peekTargetTimeValue > 0) || (_peekTime <= -1f && _peekTargetTimeValue < 0)) 
+        {
+            _peekTargetTimeValue *= -1;
         }
     }
 
@@ -74,14 +136,6 @@ public class CoverController : MonoBehaviour
                 }
             }
         }
-
-        Vector3 rst = playerPos - agentPos;
-        rst.Normalize();
-        rst *= -1;
-        rst.x *= bestPoint.lossyScale.x * 0.5f;
-        rst.z *= bestPoint.lossyScale.z * 0.5f;
-        rst.y = agentPos.y;
-        rst = bestPoint.position + rst;
         
         return bestPoint;
     }
@@ -101,6 +155,7 @@ public class CoverController : MonoBehaviour
     // 이 함수를 AI의 상태 머신에서 호출하여 엄폐를 시작
     public void SeekCover()
     {
+        _coverTime = 0f;
         List<CoverPoint> nearbyCovers = new List<CoverPoint>();
         for (int i = 0; i < _fov.Targets.Count; i++)
         {
@@ -114,8 +169,10 @@ public class CoverController : MonoBehaviour
 
         if (bestCover != null)
         {
-            CoverManager.Instance.OccupyCover(bestCover.GetComponent<CoverPoint>(), gameObject);
-            navAgent.SetDestination(getCoverPosition(bestCover));
+            CoverPoint point = bestCover.GetComponent<CoverPoint>();
+            CoverManager.Instance.OccupyCover(point, gameObject);
+            navAgent.SetDestination(point.GetNearestCoverPosition(getCoverPosition(bestCover), out _peekValue, out _coverDir));
+            _peekValue *= MAX_PEEKING_VALUE;
         }
     }
 }
