@@ -118,12 +118,12 @@ public class CoverPoint : MonoBehaviour
             if ((dir.x > 0 && _blockedDir != BLOCKED_COVER_DIRECTION.E_RIGHT) || _blockedDir == BLOCKED_COVER_DIRECTION.E_LEFT) 
             { 
                 rst.x = _rect.xMax - _padding;
-                coverValue = -1;
+                coverValue = 1;
             }
             else
             {
                 rst.x = _rect.xMin + _padding;
-                coverValue = 1;
+                coverValue = -1;
             }
         }
         return rst;

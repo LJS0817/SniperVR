@@ -2,11 +2,14 @@ using UnityEngine;
 
 public class NPC : MonoBehaviour
 {
-    public enum NPC_STATE { E_SEARCH, E_CHASE, E_COVER, E_PEEK, E_ATTACK, E_DEAD }
+    public enum NPC_STATE { E_SEARCH, E_CHASE, E_COVER, E_PEEK, E_ATTACK, E_ATTACKING, E_DEAD }
+
     [SerializeField] NPC_STATE _state;
     [SerializeField] NPCManager.TYPE _type;
+    
     NPCController _controller;
     int hp = 100;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {

@@ -9,7 +9,7 @@ public class Bullet : MonoBehaviour
     {
         _firePoint = point;
         gameObject.SetActive(false);
-        _rig = GetComponent<Rigidbody>();
+        if(_rig == null) _rig = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame

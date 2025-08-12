@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Rifle : MonoBehaviour
 {
-    Animator _ani;
-
     [SerializeField] Scope _scope;
     [SerializeField] Cylinder _cylinder;
 
@@ -23,8 +21,6 @@ public class Rifle : MonoBehaviour
 
     void Start()
     {
-        _ani = GetComponent<Animator>();
-        
         _isSetStand = false;
 
         _bulletCount = _MAX_BULLET_COUNT;
@@ -39,7 +35,7 @@ public class Rifle : MonoBehaviour
 
     private void Update()
     {
-        Debug.DrawRay(_firePoint.position, _firePoint.forward * 1000f, Color.red);
+        
         if (Input.GetKeyDown(KeyCode.A))
         {
             fire();

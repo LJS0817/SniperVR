@@ -17,6 +17,8 @@ public class CoverController : MonoBehaviour
     float _peekTime;
     int _peekTargetTimeValue;
 
+    Vector3 _lastTargetPos;
+
     CoverPoint.BLOCKED_COVER_DIRECTION _coverDir;
 
     private NavMeshAgent navAgent;
@@ -27,8 +29,11 @@ public class CoverController : MonoBehaviour
 
     FieldOfView _fov;
 
+    GunController _gunController;
+
     void Start()
     {
+        _gunController = GetComponent<GunController>();
         _npcState = GetComponent<NPC>();
         _coverTime = 0f;
         _peekTime = 0f;
@@ -57,6 +62,12 @@ public class CoverController : MonoBehaviour
                 resetPosition();
                 break;
             case NPC_STATE.E_ATTACK:
+                _gunController.Fire();
+                _npcState.SetState(NPC_STATE.E_ATTACKING);
+                break;
+            case NPC_STATE.E_ATTACKING:
+                //_gunController.Fire();
+                //_npcState.SetState(NPC_STATE.E_ATTACKING);
                 break;
             case NPC_STATE.E_DEAD:
                 break;
@@ -69,7 +80,7 @@ public class CoverController : MonoBehaviour
         if(_coverTime > 25f)
         {
             navAgent.SetDestination(_startPos);
-            transform.localRotation = Quaternion.Euler(transform.localRotation.x, transform.localRotation.y, 0f);
+            transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, 0f);
             _coverTime = 0f;
             _npcState.SetState(NPC_STATE.E_SEARCH);
         }
@@ -83,7 +94,7 @@ public class CoverController : MonoBehaviour
             {
                 if (!navAgent.hasPath || navAgent.velocity.sqrMagnitude == 0f)
                 {
-                    transform.localRotation = Quaternion.Euler(transform.localRotation.x, getYRotationValue(), 0f);
+                    transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, getYRotationValue(), 0f);
                     _npcState.SetState(NPC_STATE.E_PEEK);
                 }
             }
@@ -101,7 +112,8 @@ public class CoverController : MonoBehaviour
     void peeking()
     {
         _peekTime += Time.deltaTime * _peekTargetTimeValue;
-        transform.localRotation = Quaternion.Euler(transform.localRotation.x, transform.localRotation.y, (Mathf.Lerp(transform.localRotation.z, _peekValue, _peekTime)));
+        transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, getYRotationValue(), (Mathf.Lerp(transform.localEulerAngles.z, _peekValue, _peekTime)));
+        //transform.localRotation = Quaternion.Euler(transform.localRotation.x, transform.localRotation.y, (Mathf.Lerp(transform.localRotation.z, _peekValue, _peekTime)));
 
         if ((_peekTime >= 2f && _peekTargetTimeValue > 0) || (_peekTime <= -1f && _peekTargetTimeValue < 0)) 
         {
@@ -110,21 +122,36 @@ public class CoverController : MonoBehaviour
     }
 
     // 최적의 엄폐 지점을 찾는 함수
-    private Transform FindBestCoverInList(List<CoverPoint> covers)
+    private Transform FindBestCoverInList(List<CoverPoint> covers, List<Transform> targets)
     {
         Transform bestPoint = null;
         float minSqrDistance = float.MaxValue; // 제곱 거리로 비교
+        Vector3 agentPos = transform.position;
 
         // 플레이어 위치 캐싱 (루프 내에서 반복 접근 방지)
-        Vector3 playerPos = playerTransform.position;
-        Vector3 agentPos = transform.position;
+        //Vector3 playerPos = playerTransform.position;
+        for (int i = 0; i < targets.Count; i++)
+        {
+            Vector3 targetPos = targets[i].transform.position;
+            Vector3 dirToPlayer = (_lastTargetPos - targetPos).normalized;
+            if (!Physics.Raycast(targetPos, dirToPlayer, 500f, playerLayer))
+            {
+                float sqrDistance = (agentPos - targetPos).sqrMagnitude;
+
+                if (sqrDistance < minSqrDistance)
+                {
+                    minSqrDistance = sqrDistance;
+                    _lastTargetPos = targets[i].transform.position;
+                }
+            }
+        }
 
         for(int i = 0; i < covers.Count; i++)
         {
             // 플레이어 시야 체크
             Vector3 coverPos = covers[i].transform.position;
-            Vector3 dirToPlayer = (playerPos - coverPos).normalized;
-            if (!Physics.Raycast(coverPos, dirToPlayer, 100f, playerLayer))
+            Vector3 dirToPlayer = (_lastTargetPos - coverPos).normalized;
+            if (_lastTargetPos == Vector3.zero || !Physics.Raycast(coverPos, dirToPlayer, 500f, playerLayer))
             {
                 // 제곱 거리를 사용하여 비교 (더 빠름)
                 float sqrDistance = (agentPos - coverPos).sqrMagnitude;
@@ -157,21 +184,28 @@ public class CoverController : MonoBehaviour
     {
         _coverTime = 0f;
         List<CoverPoint> nearbyCovers = new List<CoverPoint>();
+
+        List<Transform> targets = new List<Transform>();
+
         for (int i = 0; i < _fov.Targets.Count; i++)
         {
             if(_fov.Targets[i].gameObject.layer == 7)
             {
                 nearbyCovers.Add(_fov.Targets[i].GetComponent<CoverPoint>());
+            } else if (_fov.Targets[i].gameObject.layer == 12)
+            {
+                targets.Add(_fov.Targets[i]);
             }
         }
 
-        Transform bestCover = FindBestCoverInList(nearbyCovers); // 2. 필터링된 리스트 내에서 최적 지점 계산
+        Transform bestCover = FindBestCoverInList(nearbyCovers, targets); // 2. 필터링된 리스트 내에서 최적 지점 계산
 
         if (bestCover != null)
         {
             CoverPoint point = bestCover.GetComponent<CoverPoint>();
             CoverManager.Instance.OccupyCover(point, gameObject);
             navAgent.SetDestination(point.GetNearestCoverPosition(getCoverPosition(bestCover), out _peekValue, out _coverDir));
+            Debug.Log(_coverDir);
             _peekValue *= MAX_PEEKING_VALUE;
         }
     }
