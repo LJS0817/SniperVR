@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class NPCManager : MonoBehaviour
 {
@@ -25,6 +26,10 @@ public class NPCManager : MonoBehaviour
     [SerializeField] Transform _player;
     [SerializeField] List<Transform> NPCList;
 
+    [SerializeField] RectTransform _detectImageOri;
+    [SerializeField] Transform _canvas;
+    [SerializeField] Transform _scope;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -32,6 +37,7 @@ public class NPCManager : MonoBehaviour
         {
             for(int j = 0; j <  NPCList[i].childCount; j++)
             {
+                NPCList[i].GetChild(j).GetComponent<DetectionIndicator>().SetIndicatorImage(_detectImageOri, _canvas, _scope);
                 NPCList[i].GetChild(j).GetComponent<CoverController>().playerTransform = _player;
             }
         }
