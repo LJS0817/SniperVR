@@ -14,21 +14,12 @@ public class NPCManager : MonoBehaviour
         BOSS,
     }
 
-    public static NPCController GetNPCController(TYPE t)
-    {
-        switch(t)
-        {
-            default:
-                return new Enemy();
-        }
-    }
-
     [SerializeField] Transform _player;
     [SerializeField] List<Transform> NPCList;
 
     [SerializeField] RectTransform _detectImageOri;
     [SerializeField] Transform _canvas;
-    [SerializeField] Transform _scope;
+    [SerializeField] Camera _cam;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -37,8 +28,7 @@ public class NPCManager : MonoBehaviour
         {
             for(int j = 0; j <  NPCList[i].childCount; j++)
             {
-                NPCList[i].GetChild(j).GetComponent<DetectionIndicator>().SetIndicatorImage(_detectImageOri, _canvas, _scope);
-                NPCList[i].GetChild(j).GetComponent<CoverController>().playerTransform = _player;
+                NPCList[i].GetChild(j).GetComponent<NPCController>().Init(_player, _detectImageOri, _canvas, ref _cam);
             }
         }
     }

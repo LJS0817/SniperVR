@@ -1,11 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using static NPC;
 
 public class CoverController : MonoBehaviour
 {
-    public Transform playerTransform;
+    Transform _player;
     //public float coverSearchRadius = 20f;
     public LayerMask coverLayer; // 엄폐물 레이어 (벽 등)
     public LayerMask playerLayer; // 플레이어 레이어
@@ -21,57 +20,31 @@ public class CoverController : MonoBehaviour
 
     CoverPoint.BLOCKED_COVER_DIRECTION _coverDir;
 
-    private NavMeshAgent navAgent;
-
-    NPC _npcState;
-
-    [SerializeField] float hideSensitivity;
+    private NavMeshAgent _navAgent;
 
     FieldOfView _fov;
 
-    GunController _gunController;
+    NPCController _controller;
+
+    public void SetPlayerTransform(Transform p)
+    {
+        _player = p;
+    }
 
     void Start()
     {
-        _gunController = GetComponent<GunController>();
-        _npcState = GetComponent<NPC>();
         _coverTime = 0f;
         _peekTime = 0f;
         _peekTargetTimeValue = 1;
         _startPos = transform.position;
         _fov = transform.GetChild(1).GetComponent<FieldOfView>();
-        navAgent = GetComponent<NavMeshAgent>();
+        _navAgent = GetComponent<NavMeshAgent>();
+        _controller = GetComponent<NPCController>();
     }
 
     private void Update()
     {
-        switch (_npcState.GetState())
-        {
-            case NPC_STATE.E_SEARCH:
-                // 순찰 로직
-                break;
-            case NPC_STATE.E_CHASE:
-                SeekCover();
-                _npcState.SetState(NPC_STATE.E_COVER);
-                break;
-            case NPC_STATE.E_COVER:
-                reachDestnation();
-                break;
-            case NPC_STATE.E_PEEK:
-                peeking();
-                resetPosition();
-                break;
-            case NPC_STATE.E_ATTACK:
-                _gunController.Fire();
-                _npcState.SetState(NPC_STATE.E_ATTACKING);
-                break;
-            case NPC_STATE.E_ATTACKING:
-                //_gunController.Fire();
-                //_npcState.SetState(NPC_STATE.E_ATTACKING);
-                break;
-            case NPC_STATE.E_DEAD:
-                break;
-        }
+        
     }
 
     void resetPosition()
@@ -79,26 +52,33 @@ public class CoverController : MonoBehaviour
         _coverTime += Time.deltaTime;
         if(_coverTime > 25f)
         {
-            navAgent.SetDestination(_startPos);
+            _navAgent.SetDestination(_startPos);
             transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, 0f);
             _coverTime = 0f;
-            _npcState.SetState(NPC_STATE.E_SEARCH);
+            _controller.ChangeNPCState(NPC.NPC_STATE.E_SEARCH);
         }
     }
 
-    void reachDestnation()
+    public void ReachDestnation()
     {
-        if (!navAgent.pathPending)
+        if (!_navAgent.pathPending)
         {
-            if (navAgent.remainingDistance <= navAgent.stoppingDistance)
+            if (_navAgent.remainingDistance <= _navAgent.stoppingDistance)
             {
-                if (!navAgent.hasPath || navAgent.velocity.sqrMagnitude == 0f)
+                if (!_navAgent.hasPath || _navAgent.velocity.sqrMagnitude == 0f)
                 {
                     transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, getYRotationValue(), 0f);
-                    _npcState.SetState(NPC_STATE.E_PEEK);
+                    _controller.ChangeNPCState(NPC.NPC_STATE.E_PEEK);
                 }
             }
         }
+    }
+
+    public void Dead()
+    {
+        _fov.enabled = false;
+        _navAgent.enabled = false;
+        enabled = false;
     }
 
     float getYRotationValue()
@@ -109,7 +89,7 @@ public class CoverController : MonoBehaviour
         else return 180f;
     }
 
-    void peeking()
+    public void Peeking()
     {
         _peekTime += Time.deltaTime * _peekTargetTimeValue;
         transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, getYRotationValue(), (Mathf.Lerp(transform.localEulerAngles.z, _peekValue, _peekTime)));
@@ -119,6 +99,8 @@ public class CoverController : MonoBehaviour
         {
             _peekTargetTimeValue *= -1;
         }
+
+        resetPosition();
     }
 
     // 최적의 엄폐 지점을 찾는 함수
@@ -169,7 +151,7 @@ public class CoverController : MonoBehaviour
 
     Vector3 getCoverPosition(Transform bestPoint)
     {
-        Vector3 rst = playerTransform.position - transform.position;
+        Vector3 rst = _player.position - transform.position;
         rst.Normalize();
         rst *= -1;
         rst.x *= bestPoint.lossyScale.x * 0.5f;
@@ -204,8 +186,8 @@ public class CoverController : MonoBehaviour
         {
             CoverPoint point = bestCover.GetComponent<CoverPoint>();
             CoverManager.Instance.OccupyCover(point, gameObject);
-            navAgent.SetDestination(point.GetNearestCoverPosition(getCoverPosition(bestCover), out _peekValue, out _coverDir));
-            Debug.Log(_coverDir);
+            _navAgent.SetDestination(point.GetNearestCoverPosition(getCoverPosition(bestCover), out _peekValue, out _coverDir));
+            //Debug.Log(_coverDir);
             _peekValue *= MAX_PEEKING_VALUE;
         }
     }

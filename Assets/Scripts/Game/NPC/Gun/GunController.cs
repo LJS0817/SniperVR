@@ -36,10 +36,6 @@ public class GunController : MonoBehaviour
         if (_gunState == GUN_STATE.E_FIRE && !_gun.IsEmptyAmmo())
         {
             _gun.Fire();
-            //if (_gun.IsEmptyAmmo())
-            //{
-            //    _gunState = GUN_STATE.E_RELOAD;
-            //}
         }
     }
 

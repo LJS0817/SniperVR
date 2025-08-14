@@ -7,7 +7,7 @@ public class DetectionIndicator : MonoBehaviour
     RectTransform _indicator;
     Image _image;
     [SerializeField] bool _isEnabled;
-    Transform _scope;
+    Camera _cam;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -18,44 +18,54 @@ public class DetectionIndicator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(_isEnabled)
+
+    }
+
+    private void LateUpdate()
+    {
+        if (_cam == null) return;
+        Vector3 screenPosition = _cam.WorldToScreenPoint(transform.position);
+        if (screenPosition.z > 0 && screenPosition.x > 0 && screenPosition.x < _cam.pixelWidth && screenPosition.y > 0 && screenPosition.y < _cam.pixelHeight)
         {
-            Vector3 dir = (Camera.main.WorldToScreenPoint(_scope.position) - Camera.main.WorldToScreenPoint(transform.position)).normalized;
-            Debug.Log(Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg);
-            _indicator.localEulerAngles = new Vector3(0, 0, Mathf.Atan2(dir.z, dir.x) * Mathf.Rad2Deg);
+            //Debug.Log("2315234");
+            if (_isEnabled)
+            {
+                _isEnabled = false;
+                _indicator.gameObject.SetActive(_isEnabled);
+            }
+        }
+        else
+        {
+            //Debug.Log("ASDASD");
+            if (!_isEnabled)
+            {
+                _isEnabled = true;
+                _indicator.gameObject.SetActive(_isEnabled);
+            }
+        }
+
+        if (_isEnabled)
+        {
+            Vector3 halfScreen = new Vector3(_cam.pixelWidth, _cam.pixelHeight) / 2;
+
+            screenPosition -= halfScreen;
+
+            if (screenPosition.z < 0)
+            {
+                screenPosition *= -1;
+            }
+
+            float angle = Mathf.Atan2(screenPosition.y, screenPosition.x);
+
+            _indicator.localEulerAngles = new Vector3(0, 0, angle * Mathf.Rad2Deg - 90);
         }
     }
 
-    public void SetIndicatorImage(RectTransform rect, Transform parent, Transform scope)
+    public void SetIndicatorImage(RectTransform rect, Transform parent, ref Camera cam)
     {
         _indicator = Instantiate(rect, parent);
         _image = _indicator.GetChild(0).GetComponent<Image>();
         _indicator.gameObject.SetActive(false);
-        _scope = scope;
-    }
-
-    //public void SetActiveIndicator(bool b)
-    //{
-    //    _isEnabled = b;
-    //}
-
-    private void OnBecameVisible()
-    {
-        Debug.Log("ASDASD");
-        if (!_isEnabled)
-        {
-            _isEnabled = true;
-            _indicator.gameObject.SetActive(_isEnabled);
-        }
-    }
-
-    private void OnBecameInvisible()
-    {
-        Debug.Log("2315234");
-        if (_isEnabled)
-        {
-            _isEnabled = false;
-            _indicator.gameObject.SetActive(_isEnabled);
-        }
+        _cam = cam;
     }
 }

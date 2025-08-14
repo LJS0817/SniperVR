@@ -48,22 +48,19 @@ public class FieldOfView : MonoBehaviour
     void FOVCheck()
     {
         int hits = Physics.OverlapSphereNonAlloc(transform.position, radius, _checks, _targetMask);
-        Transform target;
         if (hits != 0)
         {
             Targets.Clear();
+            Transform target;
             for (int i = 0; i < hits; i++)
             {
                 target = _checks[i].transform;
                 if (transform.GetInstanceID() == target.GetInstanceID()) continue;
                 Vector3 dir = (target.position - transform.position).normalized;
-                //Debug.Log(target.name +  "    " + Vector3.Angle(transform.forward, dir) + "    " + angle / 2);
                 if (Vector3.Angle(transform.forward, dir) < angle / 2)
                 {
-                    float dist = Vector3.Distance(transform.position, target.position);
-                    //Debug.Log(target.name + "     " + transform.GetInstanceID() + "    " + target.GetInstanceID());
-
-                    if (Physics.Raycast(transform.position, dir, 500f, ~_obstructionMask)) Targets.Add(target);
+                    if (!Physics.Linecast(transform.position, target.position, _obstructionMask)) Targets.Add(target);
+                    //if (Physics.Raycast(transform.position, dir, 500f, ~_obstructionMask)) Targets.Add(target);
                 }
             }
         }

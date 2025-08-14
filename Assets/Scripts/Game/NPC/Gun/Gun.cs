@@ -3,14 +3,15 @@ using UnityEngine;
 
 public class Gun : MonoBehaviour
 {
-    bool _canFire;
+    [SerializeField] bool _canFire;
 
-    int _amount;
+    [SerializeField] int _amount;
 
     protected int _limitAmount;
     [SerializeField] Transform _firePoint;
     [SerializeField] Transform _popPoint;
     [SerializeField] GameObject _magazineOrigin;
+    [SerializeField] ParticleSystem _muzzleEffect;
 
     Animator _ani;
     
@@ -26,13 +27,14 @@ public class Gun : MonoBehaviour
     // Update is called once per frame
     public virtual void Update()
     {
-        Debug.DrawRay(_firePoint.position, _firePoint.forward * 1000f, Color.red);
+        //Debug.DrawRay(_firePoint.position, _firePoint.forward * 1000f, Color.red);
     }
 
     public void Fire()
     {
         if(_canFire)
         {
+            _muzzleEffect.Play();
             _ani.SetTrigger("LoadAmmo");
             _amount--;
             _canFire = false;

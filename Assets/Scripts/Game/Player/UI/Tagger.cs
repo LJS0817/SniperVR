@@ -1,4 +1,5 @@
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Tagger : MonoBehaviour
@@ -44,6 +45,8 @@ public class Tagger : MonoBehaviour
 
                 HitImage.position = _firePoint.position + _firePoint.forward * dist + gravity + windDeflection;
 
+                float scale = ((0.03f * dist) / Scope.ZOOM);
+                HitImage.localScale = new Vector3(scale, scale, scale);
                 /////////////////////////////////////////////////////////////////////////////
                 if (hit.transform.tag == "Taggable")
                 {
@@ -51,10 +54,15 @@ public class Tagger : MonoBehaviour
                     if (!t.HasTag()) t.SetTag(TagPool.Instance.GetTag(), transform);
                     t.SetDistance((int)dist);
                 }
-            } else if(HitImage.gameObject.activeInHierarchy)
+            } 
+            else if(HitImage.gameObject.activeInHierarchy)
             {
                 HitImage.gameObject.SetActive(false);
             }
+        }
+        else if (HitImage.gameObject.activeInHierarchy)
+        {
+            HitImage.gameObject.SetActive(false);
         }
     }
 }

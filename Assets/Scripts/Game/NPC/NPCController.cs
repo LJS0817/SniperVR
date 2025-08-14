@@ -1,12 +1,75 @@
+using Unity.VisualScripting;
 using UnityEngine;
+using static NPC;
 
-public class NPCController
+public class NPCController : MonoBehaviour
 {
-    public NPCController()
+    DetectionIndicator _indicator;
+    CoverController _cover;
+    GunController _gunController;
+
+    ChangeState _event;
+    NPC_STATE _state;
+
+    public void AddEvent(ChangeState callback)
     {
-        Init();
+        _event += callback;
     }
 
-    public virtual void Init() { }
-    public virtual void Update() { }
+    private void Start()
+    {
+        _indicator = GetComponent<DetectionIndicator>();
+        _cover = GetComponent<CoverController>();
+        _gunController = GetComponent<GunController>();
+        AddEvent((NPC_STATE state) => { _state = state; });
+    }
+
+    private void Update()
+    {
+        switch (_state)
+        {
+            case NPC_STATE.E_SEARCH:
+                // ¼øÂû ·ÎÁ÷
+                break;
+            case NPC_STATE.E_CHASE:
+                _cover.SeekCover();
+                ChangeNPCState(NPC_STATE.E_COVER);
+                break;
+            case NPC_STATE.E_COVER:
+                _cover.ReachDestnation();
+                break;
+            case NPC_STATE.E_PEEK:
+                _cover.Peeking();
+                break;
+            case NPC_STATE.E_ATTACK:
+                _gunController.Fire();
+                ChangeNPCState(NPC_STATE.E_ATTACKING);
+                break;
+            case NPC_STATE.E_ATTACKING:
+                //_gunController.Fire();
+                //_npcState.SetState(NPC_STATE.E_ATTACKING);
+                break;
+            case NPC_STATE.E_DEAD:
+                onDead();
+                break;
+        }
+    }
+
+    public void Init(Transform player, RectTransform img, Transform canvas, ref Camera cam)
+    {
+        _indicator.SetIndicatorImage(img, canvas, ref cam);
+        _cover.SetPlayerTransform(player);
+    }
+
+    public void ChangeNPCState(NPC_STATE state)
+    {
+        _event(state);
+    }
+
+    void onDead()
+    {
+        _cover.Dead();
+        _gunController.enabled = false;
+        enabled = false;
+    }
 }
