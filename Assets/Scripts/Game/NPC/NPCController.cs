@@ -7,6 +7,8 @@ public class NPCController : MonoBehaviour
     DetectionIndicator _indicator;
     CoverController _cover;
     GunController _gunController;
+    EnemyDetector _detector;
+    FieldOfView _fov;
 
     ChangeState _event;
     NPC_STATE _state;
@@ -18,7 +20,9 @@ public class NPCController : MonoBehaviour
 
     private void Start()
     {
+        _fov = transform.GetChild(1).GetComponent<FieldOfView>();
         _indicator = GetComponent<DetectionIndicator>();
+        _detector = GetComponent<EnemyDetector>();
         _cover = GetComponent<CoverController>();
         _gunController = GetComponent<GunController>();
         AddEvent((NPC_STATE state) => { _state = state; });
@@ -29,10 +33,10 @@ public class NPCController : MonoBehaviour
         switch (_state)
         {
             case NPC_STATE.E_SEARCH:
-                // ¼øÂû ·ÎÁ÷
+                _detector.DetectEnemy(_fov.Targets[2]);
                 break;
             case NPC_STATE.E_CHASE:
-                _cover.SeekCover();
+                _cover.SeekCover(_fov.Targets[0], _detector.GetTargetPos());
                 ChangeNPCState(NPC_STATE.E_COVER);
                 break;
             case NPC_STATE.E_COVER:
@@ -70,6 +74,7 @@ public class NPCController : MonoBehaviour
     {
         _cover.Dead();
         _gunController.enabled = false;
+        _fov.enabled = false;
         enabled = false;
     }
 }

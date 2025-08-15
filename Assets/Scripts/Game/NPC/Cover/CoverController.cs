@@ -16,13 +16,9 @@ public class CoverController : MonoBehaviour
     float _peekTime;
     int _peekTargetTimeValue;
 
-    Vector3 _lastTargetPos;
-
     CoverPoint.BLOCKED_COVER_DIRECTION _coverDir;
 
     private NavMeshAgent _navAgent;
-
-    FieldOfView _fov;
 
     NPCController _controller;
 
@@ -37,7 +33,6 @@ public class CoverController : MonoBehaviour
         _peekTime = 0f;
         _peekTargetTimeValue = 1;
         _startPos = transform.position;
-        _fov = transform.GetChild(1).GetComponent<FieldOfView>();
         _navAgent = GetComponent<NavMeshAgent>();
         _controller = GetComponent<NPCController>();
     }
@@ -76,7 +71,6 @@ public class CoverController : MonoBehaviour
 
     public void Dead()
     {
-        _fov.enabled = false;
         _navAgent.enabled = false;
         enabled = false;
     }
@@ -104,38 +98,19 @@ public class CoverController : MonoBehaviour
     }
 
     // 최적의 엄폐 지점을 찾는 함수
-    private Transform FindBestCoverInList(List<CoverPoint> covers, List<Transform> targets)
+    private Transform FindBestCoverInList(List<CoverPoint> covers, Vector3 targetPos)
     {
         Transform bestPoint = null;
         float minSqrDistance = float.MaxValue; // 제곱 거리로 비교
         Vector3 agentPos = transform.position;
 
-        // 플레이어 위치 캐싱 (루프 내에서 반복 접근 방지)
-        //Vector3 playerPos = playerTransform.position;
-        for (int i = 0; i < targets.Count; i++)
-        {
-            Vector3 targetPos = targets[i].transform.position;
-            Vector3 dirToPlayer = (_lastTargetPos - targetPos).normalized;
-            if (!Physics.Raycast(targetPos, dirToPlayer, 500f, playerLayer))
-            {
-                float sqrDistance = (agentPos - targetPos).sqrMagnitude;
-
-                if (sqrDistance < minSqrDistance)
-                {
-                    minSqrDistance = sqrDistance;
-                    _lastTargetPos = targets[i].transform.position;
-                }
-            }
-        }
-
         for(int i = 0; i < covers.Count; i++)
         {
             // 플레이어 시야 체크
             Vector3 coverPos = covers[i].transform.position;
-            Vector3 dirToPlayer = (_lastTargetPos - coverPos).normalized;
-            if (_lastTargetPos == Vector3.zero || !Physics.Raycast(coverPos, dirToPlayer, 500f, playerLayer))
+            Vector3 dirToPlayer = (targetPos - coverPos).normalized;
+            if (targetPos == Vector3.zero || !Physics.Raycast(coverPos, dirToPlayer, 500f, playerLayer))
             {
-                // 제곱 거리를 사용하여 비교 (더 빠름)
                 float sqrDistance = (agentPos - coverPos).sqrMagnitude;
 
                 if (sqrDistance < minSqrDistance)
@@ -162,32 +137,26 @@ public class CoverController : MonoBehaviour
     }
 
     // 이 함수를 AI의 상태 머신에서 호출하여 엄폐를 시작
-    public void SeekCover()
+    public void SeekCover(List<Transform> list, Vector3 targetPos)
     {
         _coverTime = 0f;
         List<CoverPoint> nearbyCovers = new List<CoverPoint>();
 
-        List<Transform> targets = new List<Transform>();
-
-        for (int i = 0; i < _fov.Targets.Count; i++)
+        for (int i = 0; i < list.Count; i++)
         {
-            if(_fov.Targets[i].gameObject.layer == 7)
+            if(list[i].gameObject.layer == 7)
             {
-                nearbyCovers.Add(_fov.Targets[i].GetComponent<CoverPoint>());
-            } else if (_fov.Targets[i].gameObject.layer == 12)
-            {
-                targets.Add(_fov.Targets[i]);
+                nearbyCovers.Add(list[i].GetComponent<CoverPoint>());
             }
         }
 
-        Transform bestCover = FindBestCoverInList(nearbyCovers, targets); // 2. 필터링된 리스트 내에서 최적 지점 계산
+        Transform bestCover = FindBestCoverInList(nearbyCovers, targetPos);
 
         if (bestCover != null)
         {
             CoverPoint point = bestCover.GetComponent<CoverPoint>();
             CoverManager.Instance.OccupyCover(point, gameObject);
             _navAgent.SetDestination(point.GetNearestCoverPosition(getCoverPosition(bestCover), out _peekValue, out _coverDir));
-            //Debug.Log(_coverDir);
             _peekValue *= MAX_PEEKING_VALUE;
         }
     }

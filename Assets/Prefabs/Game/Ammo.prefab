@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6862617003934483456}
   - component: {fileID: 3710479241492793070}
   - component: {fileID: 2234169800646742630}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Ammo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -107,7 +107,7 @@ GameObject:
   - component: {fileID: 7946786414038111215}
   - component: {fileID: 8312257964171970472}
   - component: {fileID: 2937330228740516763}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Bullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -193,7 +193,7 @@ GameObject:
   - component: {fileID: 6750651931693211319}
   - component: {fileID: 6152526404325798608}
   - component: {fileID: 8473000059994327498}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Case
   m_TagString: Untagged
   m_Icon: {fileID: 0}

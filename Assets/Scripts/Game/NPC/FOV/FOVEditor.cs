@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -17,12 +18,28 @@ public class FOVEditor : Editor
         Handles.DrawLine(fov.transform.position, fov.transform.position + viewA1 * fov.radius);
         Handles.DrawLine(fov.transform.position, fov.transform.position + viewA2 * fov.radius);
 
-        if(fov.VisibleObject())
+        if(fov.VisibleObject(0))
+        {
+            Handles.color = Color.green;
+            for(int  i = 0; i < fov.Targets[0].Count; i++)
+            {
+                Handles.DrawLine(fov.transform.position, fov.Targets[0][i].transform.position);
+            }
+        }
+        if (fov.VisibleObject(1))
+        {
+            Handles.color = Color.blue;
+            for (int i = 0; i < fov.Targets[1].Count; i++)
+            {
+                Handles.DrawLine(fov.transform.position, fov.Targets[1][i].transform.position);
+            }
+        }
+        if (fov.VisibleObject(2))
         {
             Handles.color = Color.red;
-            for(int  i = 0; i < fov.Targets.Count; i++)
+            for (int i = 0; i < fov.Targets[2].Count; i++)
             {
-                Handles.DrawLine(fov.transform.position, fov.Targets[i].transform.position);
+                Handles.DrawLine(fov.transform.position, fov.Targets[2][i].transform.position);
             }
         }
     }
