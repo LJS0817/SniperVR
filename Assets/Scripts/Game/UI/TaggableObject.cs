@@ -1,5 +1,3 @@
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class TaggableObject : MonoBehaviour
@@ -56,7 +54,14 @@ public class TaggableObject : MonoBehaviour
         if(_indicator != null)
         {
             _indicator.enabled = true;
+            transform.parent.GetComponent<NPCController>().SetTag(transform);
         }
+    }
+    
+    public void Dead()
+    {
+        _tag.gameObject.SetActive(false);
+        enabled = false;
     }
 
     public void SetDistance(int dist)

@@ -61,6 +61,13 @@ public class DetectionIndicator : MonoBehaviour
         }
     }
 
+    public void Dead()
+    {
+        _isEnabled = false;
+        _indicator.gameObject.SetActive(false);
+        enabled = false;
+    }
+
     public void SetIndicatorImage(RectTransform rect, Transform parent, ref Camera cam)
     {
         _indicator = Instantiate(rect, parent);

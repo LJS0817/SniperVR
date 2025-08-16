@@ -55,6 +55,12 @@ public class FieldOfView : MonoBehaviour, ISerializationCallbackReceiver
         
     }
 
+    public void Dead()
+    {
+        StopCoroutine(FOVRoutine());
+        enabled = false;
+    }
+
     IEnumerator FOVRoutine()
     {
         WaitForSeconds wait = new WaitForSeconds(0.2f);

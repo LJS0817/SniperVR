@@ -12,6 +12,8 @@ public class GunController : MonoBehaviour
     Gun _gun;
     Animator _ani;
 
+    [SerializeField] Transform _target;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -33,14 +35,48 @@ public class GunController : MonoBehaviour
 
     private void Update()
     {
+        if(_target != null && _gunState == GUN_STATE.E_AIM)
+        {
+            Vector3 dir = _target.position - _gun.GetFirePoint();
+            _gun.transform.rotation = Quaternion.LookRotation(-dir);
+            Debug.DrawRay(_gun.GetFirePoint(), _gun.GetFireDirection() * 1000f, Color.aliceBlue);
+            if(Physics.Raycast(_gun.GetFirePoint(), _gun.GetFireDirection(), out RaycastHit hit, 500f))
+            {
+                Debug.Log(hit.transform.name);
+                if (hit.collider != null && hit.transform.gameObject.layer == _target.gameObject.layer)
+                {
+                    Debug.Log("ASDSA");
+                    Fire();
+                }
+            }
+        }
         if (_gunState == GUN_STATE.E_FIRE && !_gun.IsEmptyAmmo())
         {
             _gun.Fire();
         }
     }
 
-    public void Fire()
+    public bool FollowingTarget()
+    {
+        return _target != null;
+    }
+
+    public void SetTarget(Transform target)
+    {
+        _target = target;
+        _gunState = GUN_STATE.E_AIM;
+    }
+
+    public bool Fire()
     {
         _gunState = GUN_STATE.E_FIRE;
+        return true;
+    }
+
+    public void Dead()
+    {
+        _gunState = GUN_STATE.E_NONE;
+        _target = null;
+        _gun.enabled = false;
     }
 }

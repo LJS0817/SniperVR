@@ -30,6 +30,16 @@ public class Gun : MonoBehaviour
         //Debug.DrawRay(_firePoint.position, _firePoint.forward * 1000f, Color.red);
     }
 
+    public Vector3 GetFirePoint()
+    {
+        return _firePoint.position;
+    }
+
+    public Vector3 GetFireDirection()
+    {
+        return _firePoint.forward;
+    }
+
     public void Fire()
     {
         if(_canFire)

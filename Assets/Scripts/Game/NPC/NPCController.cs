@@ -9,6 +9,7 @@ public class NPCController : MonoBehaviour
     GunController _gunController;
     EnemyDetector _detector;
     FieldOfView _fov;
+    TaggableObject _tag;
 
     ChangeState _event;
     NPC_STATE _state;
@@ -33,8 +34,12 @@ public class NPCController : MonoBehaviour
         switch (_state)
         {
             case NPC_STATE.E_SEARCH:
-                _detector.DetectEnemy(_fov.Targets[2]);
-                break;
+                if(_detector.DetectEnemy(_fov.Targets[2]))
+                {
+                    _gunController.SetTarget(_detector.GetTarget());
+                    ChangeNPCState(NPC_STATE.E_ATTACK);
+                } else if(_gunController.FollowingTarget()) _gunController.SetTarget(null);
+                    break;
             case NPC_STATE.E_CHASE:
                 _cover.SeekCover(_fov.Targets[0], _detector.GetTargetPos());
                 ChangeNPCState(NPC_STATE.E_COVER);
@@ -46,8 +51,6 @@ public class NPCController : MonoBehaviour
                 _cover.Peeking();
                 break;
             case NPC_STATE.E_ATTACK:
-                _gunController.Fire();
-                ChangeNPCState(NPC_STATE.E_ATTACKING);
                 break;
             case NPC_STATE.E_ATTACKING:
                 //_gunController.Fire();
@@ -70,11 +73,18 @@ public class NPCController : MonoBehaviour
         _event(state);
     }
 
+    public void SetTag(Transform tag)
+    {
+        _tag = tag.GetComponent<TaggableObject>();
+    }
+
     void onDead()
     {
         _cover.Dead();
-        _gunController.enabled = false;
-        _fov.enabled = false;
+        _indicator.Dead();
+        _tag.Dead();
+        _gunController.Dead();
+        _fov.Dead();
         enabled = false;
     }
 }

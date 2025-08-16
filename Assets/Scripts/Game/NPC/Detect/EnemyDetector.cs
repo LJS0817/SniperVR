@@ -5,6 +5,8 @@ public class EnemyDetector : MonoBehaviour
 {
     LayerMask _targetLayer;
     Transform _lastTarget;
+    float _detectValue;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -24,9 +26,11 @@ public class EnemyDetector : MonoBehaviour
 
     public Vector3 GetTargetPos() { return _lastTarget.position; }
 
-    public void DetectEnemy(List<Transform> targets)
+    public Transform GetTarget() {  return _lastTarget; }
+
+    public bool DetectEnemy(List<Transform> targets)
     {
-        if(targets.Count == 0) return;
+        if(targets.Count == 0) return false;
         Vector3 agentPos = transform.position;
         
         float minSqrDistance = float.MaxValue;
@@ -48,5 +52,6 @@ public class EnemyDetector : MonoBehaviour
                 }
             }
         }
+        return _lastTarget != null;
     }
 }
