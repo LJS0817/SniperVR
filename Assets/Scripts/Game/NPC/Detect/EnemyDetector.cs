@@ -5,7 +5,6 @@ public class EnemyDetector : MonoBehaviour
 {
     LayerMask _targetLayer;
     Transform _lastTarget;
-    float _detectValue;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

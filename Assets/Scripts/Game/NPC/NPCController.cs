@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 using static NPC;
 
@@ -37,9 +36,9 @@ public class NPCController : MonoBehaviour
                 if(_detector.DetectEnemy(_fov.Targets[2]))
                 {
                     _gunController.SetTarget(_detector.GetTarget());
-                    ChangeNPCState(NPC_STATE.E_ATTACK);
+                    ChangeNPCState(NPC_STATE.E_AIMING);
                 } else if(_gunController.FollowingTarget()) _gunController.SetTarget(null);
-                    break;
+                break;
             case NPC_STATE.E_CHASE:
                 _cover.SeekCover(_fov.Targets[0], _detector.GetTargetPos());
                 ChangeNPCState(NPC_STATE.E_COVER);
@@ -50,11 +49,24 @@ public class NPCController : MonoBehaviour
             case NPC_STATE.E_PEEK:
                 _cover.Peeking();
                 break;
-            case NPC_STATE.E_ATTACK:
+            case NPC_STATE.E_AIMING:
+                if(_indicator.FindTarget()) ChangeNPCState(NPC_STATE.E_ATTACK);
+                
+                if (_gunController.LookAtTarget()) _indicator.Seek();
+                else if(_gunController.MissedTarget())
+                {
+                    _indicator.ResetIndicator();
+                    ChangeNPCState(NPC_STATE.E_SEARCH);
+                }
                 break;
-            case NPC_STATE.E_ATTACKING:
-                //_gunController.Fire();
-                //_npcState.SetState(NPC_STATE.E_ATTACKING);
+            case NPC_STATE.E_ATTACK:
+                _gunController.Fire();
+                if (_gunController.MissedTarget())
+                {
+                    Debug.Log("MISSSING");
+                    _indicator.ResetIndicator();
+                    ChangeNPCState(NPC_STATE.E_SEARCH);
+                }
                 break;
             case NPC_STATE.E_DEAD:
                 onDead();

@@ -51,6 +51,11 @@ public class Gun : MonoBehaviour
         }
     }
 
+    public bool CanFire()
+    {
+        return _canFire && !IsEmptyAmmo();
+    }
+
     public void Reload()
     {
         _amount = _limitAmount;
@@ -69,6 +74,6 @@ public class Gun : MonoBehaviour
 
     public void PopOutAmmo()
     {
-        Debug.Log("POP");
+        //Debug.Log("POP");
     }
 }

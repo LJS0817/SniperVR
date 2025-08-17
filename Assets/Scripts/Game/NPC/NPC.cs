@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class NPC : MonoBehaviour, ISerializationCallbackReceiver
 {
-    public enum NPC_STATE { E_SEARCH, E_CHASE, E_COVER, E_PEEK, E_ATTACK, E_ATTACKING, E_DEAD }
+    public enum NPC_STATE { E_SEARCH, E_CHASE, E_COVER, E_PEEK, E_AIMING, E_ATTACK, E_DEAD }
 
     [SerializeField] NPC_STATE _state;
     //[SerializeField] NPCManager.TYPE _type;

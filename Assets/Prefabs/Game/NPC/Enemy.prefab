@@ -229,6 +229,7 @@ MonoBehaviour:
   _poseType: 0
   _gunState: 0
   _gunParent: {fileID: 7890744825057887976}
+  _target: {fileID: 0}
 --- !u!114 &6262038159381389682
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -241,6 +242,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cabad63b9a3e4004eb523e820f163e03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _type: 0
   _isEnabled: 0
 --- !u!114 &5203252892602718615
 MonoBehaviour:
@@ -484,7 +486,7 @@ MonoBehaviour:
   angle: 120
   _targetMask:
     serializedVersion: 2
-    m_Bits: 4489
+    m_Bits: 4481
   _obstructionMask:
     serializedVersion: 2
     m_Bits: 32896

@@ -21,7 +21,7 @@ public class TaggableObject : MonoBehaviour
         if (_tagPos == null) { 
             _tagPos = transform.parent.GetChild(0);
             _indicator = transform.parent.GetComponent<DetectionIndicator>();
-            _indicator.enabled = false;
+            //_indicator.enabled = false;
         }
     }
 
