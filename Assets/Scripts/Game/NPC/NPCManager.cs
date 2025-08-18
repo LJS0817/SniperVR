@@ -1,19 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class NPCManager : MonoBehaviour
 {
-    public enum TYPE
-    {
-        INNOCENT,
-
-        FRIEND,
-
-        ENEMY,
-        BOSS,
-    }
-
     [SerializeField] Transform _player;
     [SerializeField] List<Transform> NPCList;
 

@@ -9,16 +9,14 @@ public class DetectionIndicator : MonoBehaviour
     [SerializeField] DETECT_TYPE _type;
     RectTransform _indicator;
     Image _image;
+
     [SerializeField] bool _isEnabled;
+    [SerializeField] bool _detectEnemy;
+
     float _detectSpeed;
     Camera _cam;
     float _targetFillAmount;
     public float _fillTime;
-
-    private void OnDisable()
-    {
-        Debug.Log("SADKLJZXCVKLJSADIOMJLQ@:W#OJKEDM@!*)(#PIK@O");
-    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -26,6 +24,7 @@ public class DetectionIndicator : MonoBehaviour
         _detectSpeed = 0.25f;
         _targetFillAmount = 1f;
         _isEnabled = false;
+        _detectEnemy = false;
         _type = DETECT_TYPE.E_NORMAL;
     }
 
@@ -45,11 +44,10 @@ public class DetectionIndicator : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (_cam == null) return;
+        if (_cam == null || !_detectEnemy) return;
         Vector3 screenPosition = _cam.WorldToScreenPoint(transform.position);
         if (screenPosition.z > 0 && screenPosition.x > 0 && screenPosition.x < _cam.pixelWidth && screenPosition.y > 0 && screenPosition.y < _cam.pixelHeight)
         {
-            //Debug.Log("2315234");
             if (_isEnabled)
             {
                 _isEnabled = false;
@@ -58,7 +56,6 @@ public class DetectionIndicator : MonoBehaviour
         }
         else
         {
-            //Debug.Log("ASDASD");
             if (!_isEnabled)
             {
                 _isEnabled = true;
@@ -88,8 +85,14 @@ public class DetectionIndicator : MonoBehaviour
         _isEnabled = false;
         _indicator.gameObject.SetActive(false);
         _image.fillAmount = 0f;
+        _detectEnemy = false;
         _type = DETECT_TYPE.E_NORMAL;
         enabled = false;
+    }
+
+    public void ShowIndicator()
+    {
+        _detectEnemy = true;
     }
 
     public void ResetIndicator()

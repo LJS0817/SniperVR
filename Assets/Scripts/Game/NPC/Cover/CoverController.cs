@@ -50,7 +50,7 @@ public class CoverController : MonoBehaviour
             _navAgent.SetDestination(_startPos);
             transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, 0f);
             _coverTime = 0f;
-            _controller.ChangeNPCState(NPC.NPC_STATE.E_SEARCH);
+            _controller.ChangeNPCState(GameCharacter.NPC_STATE.E_SEARCH);
         }
     }
 
@@ -63,7 +63,7 @@ public class CoverController : MonoBehaviour
                 if (!_navAgent.hasPath || _navAgent.velocity.sqrMagnitude == 0f)
                 {
                     transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, getYRotationValue(), 0f);
-                    _controller.ChangeNPCState(NPC.NPC_STATE.E_PEEK);
+                    _controller.ChangeNPCState(GameCharacter.NPC_STATE.E_PEEK);
                 }
             }
         }

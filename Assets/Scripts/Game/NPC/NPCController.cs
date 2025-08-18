@@ -1,5 +1,5 @@
 using UnityEngine;
-using static NPC;
+using static GameCharacter;
 
 public class NPCController : MonoBehaviour
 {
@@ -50,7 +50,10 @@ public class NPCController : MonoBehaviour
                 _cover.Peeking();
                 break;
             case NPC_STATE.E_AIMING:
-                if(_indicator.FindTarget()) ChangeNPCState(NPC_STATE.E_ATTACK);
+                if(_indicator.FindTarget())
+                {
+                    ChangeNPCState(NPC_STATE.E_ATTACK);
+                }
                 
                 if (_gunController.LookAtTarget()) _indicator.Seek();
                 else if(_gunController.MissedTarget())
@@ -60,12 +63,15 @@ public class NPCController : MonoBehaviour
                 }
                 break;
             case NPC_STATE.E_ATTACK:
-                _gunController.Fire();
                 if (_gunController.MissedTarget())
                 {
                     Debug.Log("MISSSING");
                     _indicator.ResetIndicator();
                     ChangeNPCState(NPC_STATE.E_SEARCH);
+                } else if (_gunController.LookAtTarget())
+                {
+                    Debug.Log("Fire");
+                    _gunController.Fire();
                 }
                 break;
             case NPC_STATE.E_DEAD:

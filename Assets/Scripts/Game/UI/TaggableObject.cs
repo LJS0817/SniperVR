@@ -53,7 +53,7 @@ public class TaggableObject : MonoBehaviour
         _tag.rotation = Quaternion.identity;
         if(_indicator != null)
         {
-            _indicator.enabled = true;
+            _indicator.ShowIndicator();
             transform.parent.GetComponent<NPCController>().SetTag(transform);
         }
     }

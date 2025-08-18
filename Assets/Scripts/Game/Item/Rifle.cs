@@ -10,7 +10,6 @@ public class Rifle : MonoBehaviour
     [SerializeField] Transform _trigger;
     [SerializeField] Transform _firePoint;
     [SerializeField] Magazine _magazine;
-    [SerializeField] bool _isSetStand;
 
     [SerializeField] TextMeshProUGUI _ammoText;
 
@@ -21,8 +20,6 @@ public class Rifle : MonoBehaviour
 
     void Start()
     {
-        _isSetStand = false;
-
         _bulletCount = _MAX_BULLET_COUNT;
 
         _bullet = BulletPool.Instance.CreateBullet().GetComponent<Bullet>();
@@ -64,7 +61,7 @@ public class Rifle : MonoBehaviour
         _cylinder.Fire();
         _bulletCount--;
         _bullet.gameObject.SetActive(true);
-        _bullet.Fire();
+        _bullet.Fire(false);
         _ammoText.text = _magazine.GetCurrentAmmoCount() + " / " + _bulletCount;
     }
 

@@ -4,11 +4,13 @@ public class GunController : MonoBehaviour
 {
     public enum GUN_TYPE { E_NONE, E_RIFLE, E_SNIPER }
     public enum POSE_TYPE { E_IDLE, E_STAND, E_CROUCH, E_CRAWL }
-    public enum GUN_STATE { E_NONE, E_AIM, E_AIMED, E_FIRE, E_RELOAD }
+    public enum GUN_STATE { E_NONE, E_AIM, E_AIMED, E_FIRE }
+
     [SerializeField] GUN_TYPE _gunType;
     [SerializeField] POSE_TYPE _poseType;
     [SerializeField] GUN_STATE _gunState;
     [SerializeField] Transform _gunParent;
+
     Gun _gun;
     Animator _ani;
 
@@ -46,9 +48,8 @@ public class GunController : MonoBehaviour
             _gun.Fire();
             SetTarget(_target);
         }
-        if (_target != null && _gunState == GUN_STATE.E_AIM)
+        if (_target != null && (_gunState == GUN_STATE.E_AIM || _gunState == GUN_STATE.E_AIMED))
         {
-            Debug.Log("ASKXZC");
             _aimTime += Time.deltaTime * _aimSpeed;
             Vector3 dir = _target.position - _gun.GetFirePoint();
             _gun.transform.rotation = Quaternion.Lerp(_gun.transform.rotation, Quaternion.LookRotation(-dir), _aimTime);
@@ -103,7 +104,6 @@ public class GunController : MonoBehaviour
         {
             _aimTime = 0f;
             _gunState = GUN_STATE.E_AIM;
-            Debug.Log("ASDJOZXCIOUWQE");
         }
     }
 
@@ -112,7 +112,7 @@ public class GunController : MonoBehaviour
         _gunState = GUN_STATE.E_FIRE;
     }
 
-    public bool LookAtTarget() { return _gunState == GUN_STATE.E_AIM || _gunState == GUN_STATE.E_AIMED; }
+    public bool LookAtTarget() { return _gunState == GUN_STATE.E_AIMED; }
     public bool MissedTarget() { return _gunState == GUN_STATE.E_NONE || _target == null; }
 
     public void Dead()

@@ -30,17 +30,23 @@ public class Bullet : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         Debug.Log(collision.transform.name);
-        gameObject.SetActive(false);
         BulletPool.Instance.SetHitSign(collision.contacts[0].point);
-        if(collision.transform.parent.CompareTag("Enemy"))
+        if(collision.transform.parent != null && collision.transform.parent.CompareTag("Enemy"))
         {
             collision.transform.GetComponent<MeshRenderer>().material.color = Color.red;
-            collision.transform.parent.GetComponent<NPC>().Attacked(100);
+            collision.transform.parent.GetComponent<GameCharacter>().Attacked(100);
+        } else if(collision.transform.TryGetComponent<GameCharacter>(out GameCharacter ch))
+        {
+            ch.Attacked(100);
         }
+        gameObject.SetActive(false);
     }
 
-    public void Fire()
+    public void Fire(bool fromNPC)
     {
+        if(fromNPC && _rig.useGravity) _rig.useGravity = false;
+        else if (!fromNPC && !_rig.useGravity) _rig.useGravity = true;
+
         transform.position = _firePoint.position;
         _rig.angularVelocity = Vector3.zero;
         _rig.linearVelocity = Vector3.zero;

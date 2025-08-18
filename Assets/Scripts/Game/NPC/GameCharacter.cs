@@ -1,9 +1,10 @@
 using UnityEngine;
 
-public class NPC : MonoBehaviour, ISerializationCallbackReceiver
+public class GameCharacter : MonoBehaviour, ISerializationCallbackReceiver
 {
     public enum NPC_STATE { E_SEARCH, E_CHASE, E_COVER, E_PEEK, E_AIMING, E_ATTACK, E_DEAD }
 
+    [SerializeField] bool _isPlayer;
     [SerializeField] NPC_STATE _state;
     //[SerializeField] NPCManager.TYPE _type;
 
@@ -15,6 +16,7 @@ public class NPC : MonoBehaviour, ISerializationCallbackReceiver
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        if (_isPlayer) return;
         _controller = GetComponent<NPCController>();
         _controller.AddEvent((NPC_STATE state) => { _state = state; });
     }
@@ -28,7 +30,7 @@ public class NPC : MonoBehaviour, ISerializationCallbackReceiver
     public void Attacked(int att)
     {
         hp -= att;
-        if (hp <= 0) _controller.ChangeNPCState(NPC_STATE.E_DEAD);
+        if (hp <= 0 && !_isPlayer) _controller.ChangeNPCState(NPC_STATE.E_DEAD);
     }
 
     public void OnBeforeSerialize()

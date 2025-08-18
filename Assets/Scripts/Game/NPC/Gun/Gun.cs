@@ -13,11 +13,23 @@ public class Gun : MonoBehaviour
     [SerializeField] GameObject _magazineOrigin;
     [SerializeField] ParticleSystem _muzzleEffect;
 
+    Bullet[] _bullet;
+    const int MAX_BULLET_COUNT = 9;
+    int _bulletIdx;
+
     Animator _ani;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public virtual void Start()
     {
+        _bulletIdx = 0;
+        _bullet = new Bullet[MAX_BULLET_COUNT];
+        for(int i = 0; i <  MAX_BULLET_COUNT; i++)
+        {
+            _bullet[i] = BulletPool.Instance.CreateBullet().GetComponent<Bullet>();
+            _bullet[i].Init(_firePoint);
+        }
+
         _ani = GetComponent<Animator>();
         _amount = _limitAmount;
         _canFire = true;
@@ -45,9 +57,14 @@ public class Gun : MonoBehaviour
         if(_canFire)
         {
             _muzzleEffect.Play();
-            _ani.SetTrigger("LoadAmmo");
-            _amount--;
             _canFire = false;
+            _amount--;
+
+            _bullet[_bulletIdx].gameObject.SetActive(true);
+            _bullet[_bulletIdx++].Fire(true);
+            if (_bulletIdx >= MAX_BULLET_COUNT) _bulletIdx = 0;
+
+            _ani.SetTrigger("LoadAmmo");
         }
     }
 
