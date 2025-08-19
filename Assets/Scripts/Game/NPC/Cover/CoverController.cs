@@ -160,4 +160,13 @@ public class CoverController : MonoBehaviour
             _peekValue *= MAX_PEEKING_VALUE;
         }
     }
+
+    public bool FindDeadFrined(List<Transform> list)
+    {
+        for (int i = 0; i < list.Count; i++)
+        {
+            if (list[i].parent.name == "_") return true;
+        }
+        return false;
+    }
 }

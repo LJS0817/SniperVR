@@ -28,7 +28,7 @@ public class GunController : MonoBehaviour
         _gun = _gunParent.GetChild(((int)_gunType) - 1).GetComponent<Gun>();
         _gun.gameObject.SetActive(true);
 
-        _aimSpeed = 0.35f;
+        _aimSpeed = 0.16f;
 
         if (_gunType == GUN_TYPE.E_SNIPER)
         {

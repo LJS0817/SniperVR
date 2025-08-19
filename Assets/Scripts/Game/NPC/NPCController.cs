@@ -38,6 +38,10 @@ public class NPCController : MonoBehaviour
                     _gunController.SetTarget(_detector.GetTarget());
                     ChangeNPCState(NPC_STATE.E_AIMING);
                 } else if(_gunController.FollowingTarget()) _gunController.SetTarget(null);
+                else if (_cover.FindDeadFrined(_fov.Targets[1]))
+                { 
+                    //ChangeNPCState(NPC_STATE.E_COVER);
+                }
                 break;
             case NPC_STATE.E_CHASE:
                 _cover.SeekCover(_fov.Targets[0], _detector.GetTargetPos());
@@ -103,6 +107,7 @@ public class NPCController : MonoBehaviour
         _tag.Dead();
         _gunController.Dead();
         _fov.Dead();
+        transform.name = "_";
         enabled = false;
     }
 }
