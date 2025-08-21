@@ -3,6 +3,7 @@ using static GameCharacter;
 
 public class NPCController : MonoBehaviour
 {
+    [SerializeField] Radio _radio;
     DetectionIndicator _indicator;
     CoverController _cover;
     GunController _gunController;
@@ -100,8 +101,21 @@ public class NPCController : MonoBehaviour
         _tag = tag.GetComponent<TaggableObject>();
     }
 
+    public void ConnectRadio(RadioTower tower)
+    {
+        if(_radio != null) _radio.ConnectRadioTower(tower, (t) => {
+            if (_detector.GetTarget() == null)
+            {
+                _detector.SetTarget(t);
+                _gunController.SetTarget(_detector.GetTarget());
+                ChangeNPCState(NPC_STATE.E_COVER);
+            }
+        });
+    }
+
     void onDead()
     {
+        _radio.Disable();
         _cover.Dead();
         _indicator.Dead();
         _tag.Dead();

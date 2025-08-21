@@ -27,6 +27,14 @@ public class GameCharacter : MonoBehaviour, ISerializationCallbackReceiver
         
     }
 
+    public void ConnectRadio(RadioTower tower)
+    {
+        if(_controller != null)
+        {
+            _controller.ConnectRadio(tower);
+        }
+    }
+
     public void Attacked(int att)
     {
         hp -= att;

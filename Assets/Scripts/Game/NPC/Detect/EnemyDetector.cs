@@ -25,7 +25,8 @@ public class EnemyDetector : MonoBehaviour
 
     public Vector3 GetTargetPos() { return _lastTarget.position; }
 
-    public Transform GetTarget() {  return _lastTarget; }
+    public Transform GetTarget() { return _lastTarget; }
+    public void SetTarget(Transform target) { _lastTarget = target; }
 
     public bool DetectEnemy(List<Transform> targets)
     {
