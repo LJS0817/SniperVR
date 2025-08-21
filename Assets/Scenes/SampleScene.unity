@@ -1972,7 +1972,6 @@ MonoBehaviour:
   _trigger: {fileID: 4600695673739988168}
   _firePoint: {fileID: 807172802}
   _magazine: {fileID: 627224368}
-  _isSetStand: 0
   _ammoText: {fileID: 20719035}
 --- !u!95 &356182124
 Animator:
