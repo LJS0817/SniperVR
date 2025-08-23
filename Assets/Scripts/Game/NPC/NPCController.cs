@@ -80,7 +80,7 @@ public class NPCController : MonoBehaviour
                 }
                 break;
             case NPC_STATE.E_DEAD:
-                onDead();
+                //onDead();
                 break;
         }
     }
